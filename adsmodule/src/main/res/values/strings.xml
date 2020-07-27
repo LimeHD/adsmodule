@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">LimeHdAdsSdk</string>
+    <string name="more_text">Подробнее</string>
+    <string name="timeout_occurred" translatable="false">TIMEOUT OCCURRED</string>
+    <string name="no_ad_found_at_all" translatable="false">We checked all of the ads, but no ad was found</string>
+    <string name="skip">Пропустить</string>
+    <string name="ads_off">Отключить рекламу</string>
+    <string name="isOnline" translatable="false">isOnline</string>
+    <string name="isArchive" translatable="false">isArchive</string>
+
+    // AdShowListener
+    <string name="showing" translatable="false">SHOWING</string>
+    <string name="error" translatable="false">ERROR</string>
+    <string name="completed" translatable="false">COMPLETED</string>
+    <string name="skipped" translatable="false">SKIPPED</string>
+    <string name="clicked" translatable="false">CLICKED</string>
+
+    // AdRequestListener
+    <string name="requested" translatable="false">REQUESTED</string>
+    <string name="loaded" translatable="false">LOADED</string>
+    <string name="requestError" translatable="false">ERROR</string>
+    <string name="noAd" translatable="false">NO AD FOUND</string>
+
+</resources>
