@@ -77,6 +77,12 @@ class LimeAds {
                 isDisposeAdImaAd = true
                 BackgroundAdManger.clearVariables()
             }
+            try {
+                fragmentManager.beginTransaction().remove(fragmentManager.fragments[1]).commitNowAllowingStateLoss()
+            }catch (e: Exception) {
+                Log.d(TAG, "dispose: ${e.message}")
+            }
+
         }
 
         /**
