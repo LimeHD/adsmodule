@@ -47,39 +47,6 @@ class ReadyBackgroundAdDisplay(
                 Log.d(TAG, "getAd: show ima from background")
                 viewGroup.visibility = View.VISIBLE
                 val adsManager = BackgroundAdManger.imaAdsManager
-                adsManager?.addAdEventListener { adEvent ->
-                    when(adEvent.type){
-                        AdEvent.AdEventType.LOADED -> {
-                            adRequestListener?.onLoaded(context.getString(R.string.loaded), AdType.IMA)
-                        }
-                        AdEvent.AdEventType.SKIPPED -> {
-                            adShowListener?.onSkip(context.getString(R.string.skipped), AdType.IMA)
-                        }
-                        AdEvent.AdEventType.ALL_ADS_COMPLETED -> {
-                            adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
-
-                            // should restart BackgroundAdManager
-                            BackgroundAdManger.clearVariables()
-                            LimeAds.startBackgroundRequests(
-                                context,
-                                resId,
-                                fragmentState,
-                                adRequestListener,
-                                adShowListener
-                            )
-
-                            // should start preroll handler
-                            limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
-                        }
-                        AdEvent.AdEventType.STARTED -> {
-                            adShowListener?.onShow(context.getString(R.string.showing), AdType.IMA)
-                        }
-
-                        AdEvent.AdEventType.TAPPED -> {
-                            adShowListener?.onClick(context.getString(R.string.clicked), AdType.IMA)
-                        }
-                    }
-                }
                 adsManager!!.init()
                 val imaFragment =
                     ImaFragment(adsManager)
