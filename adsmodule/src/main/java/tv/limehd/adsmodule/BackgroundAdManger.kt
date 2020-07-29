@@ -96,6 +96,7 @@ class BackgroundAdManger(
                             }catch (e: Exception){
                                 Log.d(TAG, "loadIma: ${e.message}")
                             }
+                            adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
                             Log.d(TAG, "loadIma: ALL_ADS_COMPLETED")
                         }
                         AdEvent.AdEventType.COMPLETED -> {
