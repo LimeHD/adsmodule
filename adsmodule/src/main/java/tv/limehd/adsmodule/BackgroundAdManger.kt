@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.FragmentManager
 import com.google.ads.interactivemedia.v3.api.*
 import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider
@@ -60,12 +61,14 @@ class BackgroundAdManger(
     private suspend fun loadIma(container: ViewGroup) : Boolean {
         Log.d(TAG, "loadIma: called")
 
+        val adContainer = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout) as FrameLayout?
+
         mSdkFactory = ImaSdkFactory.getInstance()
         mSdkSetting = mSdkFactory.createImaSdkSettings()
         mSdkSetting.language = "ru"
 
         val adDisplayContainer = mSdkFactory.createAdDisplayContainer()
-        adDisplayContainer.adContainer = container
+        adDisplayContainer.adContainer = adContainer
 
         mAdsLoader = mSdkFactory.createAdsLoader(context, mSdkSetting, adDisplayContainer)
 
