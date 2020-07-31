@@ -72,7 +72,6 @@ class LimeAds {
         fun dispose() {
             Log.d(TAG, "dispose: called")
             isDisposeCalled = true
-            limeAds?.context = null
             limeAds?.adUiContainer = null
             limeAds?.viewGroup = null
             if(limeAds?.getReadyAd() == AdType.IMA.typeSdk) {
@@ -84,6 +83,7 @@ class LimeAds {
             }catch (e: Exception) {
                 Log.d(TAG, "dispose: ${e.message}")
             }
+            limeAds?.context = null
         }
 
         /**
