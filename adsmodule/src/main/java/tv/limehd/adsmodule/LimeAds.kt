@@ -69,6 +69,7 @@ class LimeAds {
         var isDisposeAdImaAd: Boolean? = null
 
         @JvmStatic
+        @Throws(NullPointerException::class)
         fun dispose() {
             Log.d(TAG, "dispose: called")
             isDisposeCalled = true
