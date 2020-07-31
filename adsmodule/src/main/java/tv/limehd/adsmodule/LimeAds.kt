@@ -102,8 +102,9 @@ class LimeAds {
         @JvmOverloads
         @Throws(NullPointerException::class)
         fun startBackgroundRequests(context: Context, resId: Int, fragmentState: FragmentState, adRequestListener: AdRequestListener? = null, adShowListener: AdShowListener? = null) {
-            if(limeAds == null){
-                throw NullPointerException(Constants.libraryIsNotInitExceptionMessage)
+            
+            requireNotNull(limeAds) {
+                NullPointerException(Constants.libraryIsNotInitExceptionMessage)
             }
 
             if(isConnectionSpeedEnough(context)){
