@@ -48,6 +48,7 @@ class ReadyBackgroundAdDisplay(
                 viewGroup.visibility = View.VISIBLE
                 val adsManager = BackgroundAdManger.imaAdsManager
                 myTargetFragment.setAdsManager(adsManager)
+                fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
                 fragmentState.onSuccessState(myTargetFragment, AdType.IMA)
             }
             AdType.MyTarget.typeSdk -> {

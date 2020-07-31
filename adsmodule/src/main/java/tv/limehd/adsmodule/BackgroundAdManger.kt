@@ -95,14 +95,29 @@ class BackgroundAdManger(
                             Log.d(TAG, "loadIma: LOADED")
                         }
                         AdEvent.AdEventType.ALL_ADS_COMPLETED -> {
+                            Log.d(TAG, "loadIma: ALL_ADS_COMPLETED")
                             limeAds.adUiContainer?.visibility = View.GONE
+
+                            // should restart BackgroundAdManager
+                            BackgroundAdManger.clearVariables()
+                            LimeAds.startBackgroundRequests(
+                                context,
+                                resId,
+                                fragmentState,
+                                adRequestListener,
+                                adShowListener
+                            )
+
+                            // should start preroll handler
+                            limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
+
                             try {
                                 fragmentManager.beginTransaction().remove(fragmentManager.fragments[7]).commitNow()
                             }catch (e: Exception){
                                 Log.d(TAG, "loadIma: ${e.message}")
                             }
+
                             adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
-                            Log.d(TAG, "loadIma: ALL_ADS_COMPLETED")
                         }
                         AdEvent.AdEventType.COMPLETED -> {
                             Log.d(TAG, "loadIma: COMPLETED")
