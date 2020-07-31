@@ -246,7 +246,7 @@ class BackgroundAdManger(
                         Log.d(TAG, "loadIma: ${e.message}")
                     }
 
-                    adShowListener?.onComplete(context.getString(R.string.completed), AdType.Google)
+                    adShowListener?.onCompleteInterstitial()
                 }
 
                 override fun onAdOpened() {
