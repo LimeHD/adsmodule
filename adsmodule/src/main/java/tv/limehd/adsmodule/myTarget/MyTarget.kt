@@ -2,6 +2,8 @@ package tv.limehd.adsmodule.myTarget
 
 import android.content.Context
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.my.target.instreamads.InstreamAd
 import tv.limehd.adsmodule.AdType
@@ -28,7 +30,8 @@ class MyTarget(
     private val fragmentState: FragmentState,
     private val lastAd: String,
     private val adRequestListener: AdRequestListener?,
-    private val limeAds: LimeAds
+    private val limeAds: LimeAds,
+    private val viewGroup: ViewGroup
 ) {
 
     companion object {
@@ -47,7 +50,9 @@ class MyTarget(
 
             override fun onLoaded(instreamAd: InstreamAd) {
                 adRequestListener?.onLoaded(context.getString(R.string.loaded), AdType.MyTarget)
+                viewGroup.visibility = View.VISIBLE
                 myTargetFragment.setInstreamAd(instreamAd)
+                fragmentManager.beginTransaction().show(myTargetFragment).commit()
                 fragmentState.onSuccessState(myTargetFragment, AdType.MyTarget)
             }
 

@@ -425,7 +425,7 @@ class LimeAds {
 
     private fun getMyTargetAd() {
         Log.d(TAG, "Load mytarget ad")
-        myTarget = MyTarget(context!!, resId, myTargetFragment, fragmentManager, fragmentState, lastAd, adRequestListener, this)
+        myTarget = MyTarget(context!!, resId, myTargetFragment, fragmentManager, fragmentState, lastAd, adRequestListener, this, viewGroup!!)
         loadAd(AdType.MyTarget)
     }
 
