@@ -161,11 +161,14 @@ class LimeAds {
                   fragmentState: FragmentState,
                   isOnline: Boolean,
                   adRequestListener: AdRequestListener? = null,
-                  adShowListener: AdShowListener? = null) {
+                  adShowListener: AdShowListener? = null
+        ) {
 
-            if(limeAds == null){
-                throw NullPointerException(Constants.libraryIsNotInitExceptionMessage)
+            requireNotNull(limeAds) {
+                NullPointerException(Constants.libraryIsNotInitExceptionMessage)
             }
+
+            // After this null check. limeAds variable is not null. So below limeAds?.... does not throw NPE exception
 
             limeAds?.context = context
             this.adRequestListener = adRequestListener
