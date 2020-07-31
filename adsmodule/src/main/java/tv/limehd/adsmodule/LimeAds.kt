@@ -72,17 +72,23 @@ class LimeAds {
         fun dispose() {
             Log.d(TAG, "dispose: called")
             isDisposeCalled = true
-            limeAds?.adUiContainer = null
-            limeAds?.viewGroup = null
-            if(limeAds?.getReadyAd() == AdType.IMA.typeSdk) {
-                isDisposeAdImaAd = true
-                BackgroundAdManger.clearVariables()
-            }
+
+            limeAds?.let {
+                it.adUiContainer = null
+                it.viewGroup = null
+
+                if(it.getReadyAd() == AdType.IMA.typeSdk) {
+                    isDisposeAdImaAd = true
+                    BackgroundAdManger.clearVariables()
+                }
+            } ?: throw NullPointerException(Constants.libraryIsNotInitExceptionMessage)
+
             try {
                 fragmentManager.beginTransaction().remove(fragmentManager.fragments[1]).commitNowAllowingStateLoss()
             }catch (e: Exception) {
                 Log.d(TAG, "dispose: ${e.message}")
             }
+
             limeAds?.context = null
         }
 
