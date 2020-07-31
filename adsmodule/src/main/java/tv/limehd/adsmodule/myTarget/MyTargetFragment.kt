@@ -247,12 +247,9 @@ class MyTargetFragment(
         }
     }
 
-    /**
-     * Stops all 3-rd party libraries processes
-     * Calls when `closing activity`, `buy subscription`
-     */
-
-    fun dispose() {
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy: called")
+        super.onDestroy()
         if(this::leftHandler.isInitialized) {
             leftHandler.removeCallbacks(leftRunnable)
         }
@@ -261,6 +258,9 @@ class MyTargetFragment(
         }
         if(this::mInstreamAd.isInitialized) {
             mInstreamAd.stop()
+        }
+        if(adsManager != null) {
+            adsManager?.destroy()
         }
     }
 

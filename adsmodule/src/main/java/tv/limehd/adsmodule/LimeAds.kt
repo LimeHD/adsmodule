@@ -69,6 +69,7 @@ class LimeAds {
 
         @JvmStatic
         fun dispose() {
+            Log.d(TAG, "dispose: called")
             isDisposeCalled = true
             limeAds?.context = null
             limeAds?.adUiContainer = null
@@ -82,7 +83,6 @@ class LimeAds {
             }catch (e: Exception) {
                 Log.d(TAG, "dispose: ${e.message}")
             }
-
         }
 
         /**
