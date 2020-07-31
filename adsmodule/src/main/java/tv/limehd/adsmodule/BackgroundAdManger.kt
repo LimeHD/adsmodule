@@ -229,8 +229,9 @@ class BackgroundAdManger(
                 }
 
                 override fun onAdClosed() {
+                    Log.d(TAG, "onAdClosed: called")
 
-                    adShowListener?.onComplete(context.getString(R.string.completed), AdType.Google)
+                    limeAds.adUiContainer?.visibility = View.GONE
 
                     // should restart BackgroundAdManager
                     clearVariables()
@@ -238,6 +239,14 @@ class BackgroundAdManger(
 
                     // should start preroll handler
                     limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
+
+                    try {
+                        fragmentManager.beginTransaction().remove(fragmentManager.fragments[1]).commitNow()
+                    }catch (e: Exception){
+                        Log.d(TAG, "loadIma: ${e.message}")
+                    }
+
+                    adShowListener?.onComplete(context.getString(R.string.completed), AdType.Google)
                 }
 
                 override fun onAdOpened() {
