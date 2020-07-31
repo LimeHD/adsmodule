@@ -5,6 +5,8 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.fragment.app.FragmentManager
 import com.google.ads.interactivemedia.v3.api.*
 import com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider
 import com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate
@@ -16,6 +18,7 @@ import tv.limehd.adsmodule.R
 import tv.limehd.adsmodule.interfaces.AdRequestListener
 import tv.limehd.adsmodule.interfaces.AdShowListener
 import tv.limehd.adsmodule.interfaces.FragmentState
+import tv.limehd.adsmodule.myTarget.MyTargetFragment
 
 /**
  * This class stands for loading ima ads logic
@@ -28,10 +31,12 @@ class ImaLoader constructor(
     private val adTagUrl: String,
     private val lastAd: String,
     private val resId: Int,
-    private val container: ViewGroup,
+    private val container: FrameLayout,
     private val adRequestListener: AdRequestListener?,
     private val adShowListener: AdShowListener?,
-    private val limeAds: LimeAds
+    private val limeAds: LimeAds,
+    private val myTargetFragment: MyTargetFragment,
+    private val fragmentManager: FragmentManager
 ) : AdsLoader.AdsLoadedListener, AdErrorEvent.AdErrorListener, AdEvent.AdEventListener {
 
     companion object {
@@ -130,9 +135,9 @@ class ImaLoader constructor(
             AdEvent.AdEventType.LOADED -> {
                 Log.d(TAG, "loaded")
                 adRequestListener?.onLoaded(context.getString(R.string.loaded), AdType.IMA)
-                imaFragment =
-                    ImaFragment(adsManager)
-                fragmentState.onSuccessState(imaFragment, AdType.IMA)
+                myTargetFragment.setAdsManager(adsManager)
+                fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
+                fragmentState.onSuccessState(myTargetFragment, AdType.IMA)
             }
             AdEvent.AdEventType.ALL_ADS_COMPLETED -> {
                 Log.d(TAG, "ALL_ADS_COMPLETED")

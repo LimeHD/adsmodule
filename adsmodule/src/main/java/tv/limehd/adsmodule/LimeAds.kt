@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Handler
 import android.util.Log
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -170,6 +171,12 @@ class LimeAds {
                 this.fragmentManager = fragmentActivity.supportFragmentManager
             }
             this.resId = resId
+
+            if(!this::myTargetFragment.isInitialized) {
+                myTargetFragment = MyTargetFragment(limeAds!!.lastAd, Companion.resId, Companion.fragmentState, Companion.adRequestListener, Companion.adShowListener, limeAds!!)
+                fragmentManager.beginTransaction().replace(Companion.resId, myTargetFragment).commitAllowingStateLoss()
+                fragmentManager.beginTransaction().hide(myTargetFragment).commitAllowingStateLoss()
+            }
 
             limeAds?.let {
                 it.getCurrentAdStatus(isOnline)
@@ -476,7 +483,8 @@ class LimeAds {
 
     private fun getImaAd() {
         Log.d(TAG, "Load IMA ad")
-        ima = Ima(context!!, Constants.testAdTagUrl, lastAd, resId, limeAds?.viewGroup!!, fragmentState, adRequestListener!!, adShowListener!!, this)
+        val imaAdContainer = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout) as FrameLayout
+        ima = Ima(context!!, Constants.testAdTagUrl, lastAd, resId, imaAdContainer, fragmentState, adRequestListener, adShowListener, this, myTargetFragment, fragmentManager)
         loadAd(AdType.IMA)
     }
 

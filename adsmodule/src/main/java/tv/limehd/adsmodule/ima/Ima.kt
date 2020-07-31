@@ -2,11 +2,14 @@ package tv.limehd.adsmodule.ima
 
 import android.content.Context
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.fragment.app.FragmentManager
 import tv.limehd.adsmodule.LimeAds
 import tv.limehd.adsmodule.ima.vast2.ImaLoader
 import tv.limehd.adsmodule.interfaces.AdRequestListener
 import tv.limehd.adsmodule.interfaces.AdShowListener
 import tv.limehd.adsmodule.interfaces.FragmentState
+import tv.limehd.adsmodule.myTarget.MyTargetFragment
 
 /**
  * Class with ImaAd logic
@@ -22,11 +25,13 @@ class Ima(private val context: Context,
           private val adTagUrl: String,
           private val lastAd: String,
           private val resId: Int,
-          private val viewGroup: ViewGroup,
+          private val viewGroup: FrameLayout,
           private val fragmentState: FragmentState,
           private val adRequestListener: AdRequestListener?,
           private val adShowListener: AdShowListener?,
-          private val limeAds: LimeAds
+          private val limeAds: LimeAds,
+          private val myTargetFragment: MyTargetFragment,
+          private val fragmentManager: FragmentManager
 ) {
 
     fun loadAd() {
@@ -38,7 +43,9 @@ class Ima(private val context: Context,
             viewGroup,
             adRequestListener,
             adShowListener,
-            limeAds
+            limeAds,
+            myTargetFragment,
+            fragmentManager
         )
         imaLoader.loadImaAd(fragmentState)
     }
