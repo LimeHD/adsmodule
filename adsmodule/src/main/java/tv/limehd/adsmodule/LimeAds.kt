@@ -103,12 +103,12 @@ class LimeAds {
                 myTargetFragment = MyTargetFragment(limeAds!!.lastAd, resId, fragmentState, adRequestListener, adShowListener, limeAds!!)
                 val fragmentActivity = context as FragmentActivity
                 fragmentManager = fragmentActivity.supportFragmentManager
-                backgroundAdManger = BackgroundAdManger(context, resId, fragmentState, adShowListener, adRequestListener, preload, adsList, limeAds!!, fragmentManager)
-                backgroundAdManger.startBackgroundRequests()
                 if(!MyTargetFragment.isShowingAd){
                     fragmentManager.beginTransaction().replace(resId, myTargetFragment).commitAllowingStateLoss()
                     fragmentManager.beginTransaction().hide(myTargetFragment).commitAllowingStateLoss()
                 }
+                backgroundAdManger = BackgroundAdManger(context, resId, fragmentState, adShowListener, adRequestListener, preload, adsList, limeAds!!, fragmentManager, myTargetFragment)
+                backgroundAdManger.startBackgroundRequests()
             }else{
                 Log.d(TAG, "startBackgroundRequests: not called, cause of the internet")
             }

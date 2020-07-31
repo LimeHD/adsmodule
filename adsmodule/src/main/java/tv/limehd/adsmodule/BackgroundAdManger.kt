@@ -20,6 +20,7 @@ import tv.limehd.adsmodule.interfaces.AdShowListener
 import tv.limehd.adsmodule.interfaces.FragmentState
 import tv.limehd.adsmodule.model.Ad
 import tv.limehd.adsmodule.model.PreloadAds
+import tv.limehd.adsmodule.myTarget.MyTargetFragment
 import tv.limehd.adsmodule.myTarget.MyTargetLoader
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -33,7 +34,8 @@ class BackgroundAdManger(
     private val preload: PreloadAds,
     private val adsList: List<Ad>,
     private val limeAds: LimeAds,
-    private val fragmentManager: FragmentManager
+    private val fragmentManager: FragmentManager,
+    private val myTargetFragment: MyTargetFragment
 ){
 
     companion object {
