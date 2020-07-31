@@ -47,10 +47,8 @@ class ReadyBackgroundAdDisplay(
                 Log.d(TAG, "getAd: show ima from background")
                 viewGroup.visibility = View.VISIBLE
                 val adsManager = BackgroundAdManger.imaAdsManager
-                adsManager!!.init()
-                val imaFragment =
-                    ImaFragment(adsManager)
-                fragmentState.onSuccessState(imaFragment, AdType.IMA)
+                myTargetFragment.setAdsManager(adsManager)
+                fragmentState.onSuccessState(myTargetFragment, AdType.IMA)
             }
             AdType.MyTarget.typeSdk -> {
                 // show mytarget ad

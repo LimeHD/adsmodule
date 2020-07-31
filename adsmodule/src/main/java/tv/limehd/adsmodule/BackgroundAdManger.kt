@@ -123,6 +123,7 @@ class BackgroundAdManger(
                 imaAdsManager?.addAdErrorListener { adErrorEvent ->
                     Log.d(TAG, "loadIma: ERROR ${adErrorEvent.error.message}")
                 }
+                imaAdsManager?.init()
                 cont.resume(true)
             }
             mAdsLoader.addAdErrorListener {

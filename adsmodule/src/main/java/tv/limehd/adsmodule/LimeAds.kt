@@ -259,12 +259,9 @@ class LimeAds {
          * @param   fragment      Fragment on which library will show ad (MyTargetFragment, ImaFragment ...)
          */
         @JvmStatic
-        fun showAd(fragment: Fragment){
+        fun showAd(fragment: MyTargetFragment, owner: AdType){
             fragmentManager.beginTransaction().replace(resId, fragment).commitAllowingStateLoss()
-            when(fragment){
-                is MyTargetFragment -> fragment.initializePlaying()
-                is ImaFragment -> fragment.initializePlaying()
-            }
+            fragment.initializePlaying(owner)
         }
 
         /**

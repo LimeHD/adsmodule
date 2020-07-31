@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.ads.interactivemedia.v3.api.AdsManager
 import com.my.target.instreamads.InstreamAd
 import com.my.target.instreamads.InstreamAdPlayer
 import tv.limehd.adsmodule.AdType
@@ -46,6 +47,8 @@ class MyTargetFragment(
     private var leftTimeDelay = 0f
     private lateinit var leftHandler: Handler
 
+    private var adsManager: AdsManager? = null
+
     private var leftRunnable: Runnable = object : Runnable {
         override fun run() {
             if (leftTimeDelay > 0) {
@@ -80,6 +83,10 @@ class MyTargetFragment(
         setListener()
     }
 
+    fun setAdsManager(adsManager: AdsManager?) {
+        this.adsManager = adsManager
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -102,8 +109,14 @@ class MyTargetFragment(
         return rootView
     }
 
-    fun initializePlaying(){
-        mInstreamAd.startPreroll()
+    fun initializePlaying(adType: AdType){
+        when(adType) {
+            is AdType.IMA -> {
+                // should hide my target ui widgets
+                adsManager?.start()
+            }
+            is AdType.MyTarget -> mInstreamAd.startPreroll()
+        }
     }
 
     private fun setListener() {
