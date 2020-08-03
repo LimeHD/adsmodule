@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Runnable
 import org.json.JSONObject
@@ -138,8 +139,9 @@ class LimeAds {
             this.json = json
             limeAds = LimeAds()
             limeAds?.let {
-                it.getAdsList()
-                it.getAdsGlobalModels()
+                val gson = GsonBuilder().create()
+                it.getAdsList(gson)
+                it.getAdsGlobalModels(gson)
             }
         }
 
@@ -385,8 +387,7 @@ class LimeAds {
      * load ad
      */
 
-    private fun getAdsList() {
-        val gson = GsonBuilder().create()
+    private fun getAdsList(gson: Gson) {
         adsList = gson.fromJson(json.getJSONArray("ads").toString(), Array<Ad>::class.java).toList()
     }
 
@@ -395,8 +396,7 @@ class LimeAds {
      * preroll, preload_ads, yandex_min_api, interstitial
      */
 
-    private fun getAdsGlobalModels() {
-        val gson = GsonBuilder().create()
+    private fun getAdsGlobalModels(gson: Gson) {
         interstitial = gson.fromJson(json.getJSONObject("ads_global").getJSONObject("interstitial").toString(), Interstitial::class.java)
         preroll = gson.fromJson(json.getJSONObject("ads_global").getJSONObject("preroll").toString(), Preroll::class.java)
         preload = gson.fromJson(json.getJSONObject("ads_global").getJSONObject("preload_ads").toString(), PreloadAds::class.java)
