@@ -498,6 +498,7 @@ class LimeAds {
      * Получить рекламу от площадки IMA
      */
 
+    @Throws(NullPointerException::class)
     private fun getImaAd() {
         Log.d(TAG, "Load IMA ad")
         context?.let { context ->
@@ -514,9 +515,13 @@ class LimeAds {
      * Получить рекламу для площадки Google
      */
 
+    @Throws(NullPointerException::class)
     private fun getGoogleAd() {
         Log.d(TAG, "getGoogleAd: called")
-        google = Google(context!!, lastAd, resId, fragmentState, adRequestListener, adShowListener, preroll, this)
+        context?.let { context ->
+            google = Google(context, lastAd, resId, fragmentState, adRequestListener, adShowListener, preroll, this)
+        } ?: throw NullPointerException("Context is null. Maybe you did not init library!")
+
         loadAd(AdType.Google)
     }
 
