@@ -294,16 +294,15 @@ class LimeAds {
         @JvmStatic
         @Throws(NullPointerException::class)
         fun getGoogleInterstitialAd(context: Context, fragmentState: FragmentState, adRequestListener: AdRequestListener?, adShowListener: AdShowListener?) {
-            if(limeAds == null){
-                throw NullPointerException(Constants.libraryIsNotInitExceptionMessage)
+            requireNotNull(limeAds) {
+                NullPointerException(Constants.libraryIsNotInitExceptionMessage)
             }
+            // After this null check. limeAds variable is not null. So below limeAds?.... does not throw NPE exception
             with(limeAds!!) {
                 if(this.isAllowedToRequestGoogleAd){
                     if(isConnectionSpeedEnough(context)) {
                         this.isAllowedToRequestGoogleAd = false
-                        if(this.timer == 0){
-                            this.timer = 30
-                        }
+                        if (this.timer == 0) this.timer = 30
                         google = Google(context, lastAd, resId, fragmentState, adRequestListener, adShowListener, preroll, this)
                         google.getGoogleAd(true)
                     }else{
