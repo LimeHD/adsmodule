@@ -151,9 +151,13 @@ class ImaLoader constructor(
                 viewGroup.visibility = View.INVISIBLE
                 adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
 
-                // should restart BackgroundAdManager
-                BackgroundAdManger.clearVariables()
-                LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
+                if(LimeAds.isBackgroundRequestsCalled) {
+                    // should restart BackgroundAdManager
+                    BackgroundAdManger.clearVariables()
+                    LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
+                }else {
+                    Log.d(TAG, "BACKGROUND REQUEST ARE NOT STARTED")
+                }
 
                 limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
             }

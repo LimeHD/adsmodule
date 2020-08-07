@@ -152,9 +152,13 @@ class GoogleLoader(
                     LimeAds.prerollTimer = preroll.epg_timer
                     limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
 
-                    // should restart BackgroundAdManager
-                    BackgroundAdManger.clearVariables()
-                    LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
+                    if(LimeAds.isBackgroundRequestsCalled) {
+                        // should restart BackgroundAdManager
+                        BackgroundAdManger.clearVariables()
+                        LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
+                    }else {
+                        Log.d(TAG, "BACKGROUND REQUEST ARE NOT STARTED")
+                    }
                 }
             }
 

@@ -68,12 +68,15 @@ class LimeAds {
         var isDisposeCalled: Boolean? = null
         @JvmField
         var isDisposeAdImaAd: Boolean? = null
+        var isBackgroundRequestsCalled = false
 
         @JvmStatic
         @Throws(NullPointerException::class)
         fun dispose() {
             Log.d(TAG, "dispose: called")
             isDisposeCalled = true
+
+            isBackgroundRequestsCalled = false
 
             limeAds?.let {
                 it.adUiContainer = null
@@ -108,6 +111,8 @@ class LimeAds {
             requireNotNull(limeAds) {
                 NullPointerException(Constants.libraryIsNotInitExceptionMessage)
             }
+
+            isBackgroundRequestsCalled = true
 
             if(isConnectionSpeedEnough(context)){
                 myTargetFragment = MyTargetFragment(limeAds!!.lastAd, resId, fragmentState, adRequestListener, adShowListener, limeAds!!)

@@ -139,9 +139,13 @@ class MyTargetFragment(
 
                 limeAds.adUiContainer?.visibility = View.GONE
 
-                // should restart BackgroundAdManager
-                BackgroundAdManger.clearVariables()
-                LimeAds.startBackgroundRequests(context!!, resId, fragmentState, adRequestListener, adShowListener)
+                if(LimeAds.isBackgroundRequestsCalled) {
+                    // should restart BackgroundAdManager
+                    BackgroundAdManger.clearVariables()
+                    LimeAds.startBackgroundRequests(context!!, resId, fragmentState, adRequestListener, adShowListener)
+                }else {
+                    Log.d(TAG, "BACKGROUND REQUEST ARE NOT STARTED")
+                }
 
                 if(this@MyTargetFragment::leftHandler.isInitialized) {
                     leftHandler.removeCallbacks(leftRunnable)
