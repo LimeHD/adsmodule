@@ -1,5 +1,6 @@
 package tv.limehd.adsmodule.ima.vast2
 
+import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.util.Log
@@ -77,9 +78,14 @@ class ImaLoader constructor(
         }
     }
 
+    private lateinit var viewGroup: ViewGroup
+
     fun loadImaAd(fragmentState: FragmentState) {
         Log.d(TAG, "loadImaAd called")
         this.fragmentState = fragmentState
+
+        val activity = context as Activity
+        viewGroup = activity.findViewById(resId)
 
         mSdkFactory = ImaSdkFactory.getInstance()
         mSdkSetting = mSdkFactory.createImaSdkSettings()
@@ -135,12 +141,14 @@ class ImaLoader constructor(
             AdEvent.AdEventType.LOADED -> {
                 Log.d(TAG, "loaded")
                 adRequestListener?.onLoaded(context.getString(R.string.loaded), AdType.IMA)
+                viewGroup.visibility = View.VISIBLE
                 myTargetFragment.setAdsManager(adsManager)
                 fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
                 fragmentState.onSuccessState(myTargetFragment, AdType.IMA)
             }
             AdEvent.AdEventType.ALL_ADS_COMPLETED -> {
                 Log.d(TAG, "ALL_ADS_COMPLETED")
+                viewGroup.visibility = View.INVISIBLE
                 adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
 
                 // should restart BackgroundAdManager

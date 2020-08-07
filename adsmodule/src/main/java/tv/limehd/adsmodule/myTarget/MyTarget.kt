@@ -63,8 +63,8 @@ class MyTarget(
             override fun onNoAd(error: String) {
                 Log.d(TAG, "MyTarget onNoAd called $error")
                 adRequestListener?.onNoAd(error, AdType.MyTarget)
-                fragmentManager.beginTransaction().remove(myTargetFragment).commit()
                 if(lastAd == AdType.MyTarget.typeSdk){
+                    fragmentManager.beginTransaction().remove(myTargetFragment).commit()
                     fragmentState.onErrorState(context.resources.getString(R.string.no_ad_found_at_all), AdType.MyTarget)
                 }else {
                     limeAds.getNextAd(AdType.MyTarget.typeSdk)
