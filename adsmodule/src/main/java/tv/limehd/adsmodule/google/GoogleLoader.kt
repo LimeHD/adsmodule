@@ -118,13 +118,20 @@ class GoogleLoader(
                 } else {
                     if(!isLoadInterstitial) {
                         Log.d(TAG, "onAdFailedToLoad: error from google. should load next ad")
-                        if(LimeAds.isDisposeCalled!! && LimeAds.isDisposeAdImaAd!!) {
-                            limeAds.isAllowedToRequestAd = true
-                            LimeAds.userClicksCounter = 0
-                            LimeAds.prerollTimer = 0
-                            LimeAds.isDisposeAdImaAd = false
-                            LimeAds.isDisposeCalled = false
-                            fragmentState.onErrorState(context.resources.getString(R.string.no_ad_found_at_all), AdType.Google)
+                        if(LimeAds.isDisposeCalled != null && LimeAds.isDisposeAdImaAd != null) {
+                            if (LimeAds.isDisposeCalled!! && LimeAds.isDisposeAdImaAd!!) {
+                                limeAds.isAllowedToRequestAd = true
+                                LimeAds.userClicksCounter = 0
+                                LimeAds.prerollTimer = 0
+                                LimeAds.isDisposeAdImaAd = false
+                                LimeAds.isDisposeCalled = false
+                                fragmentState.onErrorState(
+                                    context.resources.getString(R.string.no_ad_found_at_all),
+                                    AdType.Google
+                                )
+                            } else {
+                                limeAds.getNextAd(AdType.Google.typeSdk)
+                            }
                         }else {
                             limeAds.getNextAd(AdType.Google.typeSdk)
                         }
