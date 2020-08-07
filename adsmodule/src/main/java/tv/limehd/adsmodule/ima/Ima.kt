@@ -37,8 +37,8 @@ class Ima(private val context: Context,
     fun loadAd() {
         val imaLoader = ImaLoader(
             context,
-            lastAd,
             adTagUrl,
+            lastAd,
             resId,
             viewGroup,
             adRequestListener,
