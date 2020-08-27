@@ -329,13 +329,18 @@ class LimeAds {
             // After this null check. limeAds variable is not null. So below limeAds?.... does not throw NPE exception
             with(limeAds!!) {
                 if(this.isAllowedToRequestGoogleAd){
-                    if(isConnectionSpeedEnough(context)) {
-                        this.isAllowedToRequestGoogleAd = false
-                        if (this.timer == 0) this.timer = 30
-                        google = Google(context, lastAd, resId, fragmentState, adRequestListener, adShowListener, preroll, this)
-                        google.getGoogleAd(true)
-                    }else{
-                        Log.d(TAG, "getGoogleInterstitialAd: not called, cause of the internet")
+                    if(this.checkConnection) {
+                        if(isConnectionSpeedEnough(context)) {
+                            this.isAllowedToRequestGoogleAd = false
+                            if (this.timer == 0) this.timer = 30
+                            google = Google(context, lastAd, resId, fragmentState, adRequestListener, adShowListener, preroll, this)
+                            google.getGoogleAd(true)
+                        }else{
+                            Log.d(TAG, "getGoogleInterstitialAd: not called, cause of the internet")
+                        }
+                    }else {
+                        // do module job using handlers and timeouts
+                        Log.d(TAG, "getAd: do module job using handlers and timeouts")
                     }
                 }else {
                     adRequestListener?.onEarlyRequestInterstitial()
