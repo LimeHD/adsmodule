@@ -45,6 +45,8 @@ class BackgroundAdManger(
         var myTargetInstreamAd: InstreamAd? = null
         var googleInterstitialAd: InterstitialAd? = null
 
+        var myTargetFragmentFrameLayout: FrameLayout? = null
+
         fun clearVariables() {
             googleInterstitialAd = null
             imaAdsManager = null
@@ -61,7 +63,11 @@ class BackgroundAdManger(
     private suspend fun loadIma(container: ViewGroup) : Boolean {
         Log.d(TAG, "loadIma: called")
 
-        val adContainer = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout) as FrameLayout?
+        var adContainer = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout) as FrameLayout?
+
+        if(myTargetFragment.view == null) {
+            adContainer = myTargetFragmentFrameLayout
+        }
 
         mSdkFactory = ImaSdkFactory.getInstance()
         mSdkSetting = mSdkFactory.createImaSdkSettings()

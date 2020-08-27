@@ -230,6 +230,10 @@ class LimeAds {
             userClicksCounter++
             Log.d(TAG, "userClicks: $userClicksCounter")
 
+            if(myTargetFragment.view != null) {
+                BackgroundAdManger.myTargetFragmentFrameLayout = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout)
+            }
+
             val readyBackgroundSkd = limeAds!!.getReadyAd()
 
             if(!limeAds?.isAllowedToRequestAd!! && userClicksCounter < 5){
