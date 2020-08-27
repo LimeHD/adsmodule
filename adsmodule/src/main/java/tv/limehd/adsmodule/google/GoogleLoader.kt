@@ -53,12 +53,8 @@ class GoogleLoader(
             }else{
                 if(isTimeout){
                     adRequestListener?.onError(context.resources.getString(R.string.timeout_occurred), AdType.Google)
-                    if(lastAd == AdType.Google.typeSdk){
-                        fragmentState.onErrorState(context.resources.getString(R.string.no_ad_found_at_all), AdType.Google)
-                    }else {
-                        if(!isLoadInterstitial) {
-                            limeAds.getNextAd(AdType.Google.typeSdk)
-                        }
+                    if(!isLoadInterstitial) {
+                        limeAds.getNextAd(AdType.Google.typeSdk)
                     }
                 }
             }
@@ -107,34 +103,21 @@ class GoogleLoader(
                     adRequestListener?.onError(errorMessage, AdType.Google)
                 }
 
-                if (lastAd == AdType.Google.typeSdk) {
-                    Log.d(TAG, "onAdFailedToLoad: last ad from google. should have error state")
-                    limeAds.isAllowedToRequestAd = true
-                    LimeAds.userClicksCounter = 0
-                    LimeAds.prerollTimer = 0
-                    LimeAds.isDisposeAdImaAd = false
-                    LimeAds.isDisposeCalled = false
-                    fragmentState.onErrorState(context.resources.getString(R.string.no_ad_found_at_all), AdType.Google)
-                } else {
-                    if(!isLoadInterstitial) {
-                        Log.d(TAG, "onAdFailedToLoad: error from google. should load next ad")
-                        if(LimeAds.isDisposeCalled != null && LimeAds.isDisposeAdImaAd != null) {
-                            if (LimeAds.isDisposeCalled!! && LimeAds.isDisposeAdImaAd!!) {
-                                limeAds.isAllowedToRequestAd = true
-                                LimeAds.userClicksCounter = 0
-                                LimeAds.prerollTimer = 0
-                                LimeAds.isDisposeAdImaAd = false
-                                LimeAds.isDisposeCalled = false
-                                fragmentState.onErrorState(
-                                    context.resources.getString(R.string.no_ad_found_at_all),
-                                    AdType.Google
-                                )
-                            } else {
-                                limeAds.getNextAd(AdType.Google.typeSdk)
-                            }
-                        }else {
+                if(!isLoadInterstitial) {
+                    Log.d(TAG, "onAdFailedToLoad: error from google. should load next ad")
+                    if(LimeAds.isDisposeCalled != null && LimeAds.isDisposeAdImaAd != null) {
+                        if (LimeAds.isDisposeCalled!! && LimeAds.isDisposeAdImaAd!!) {
+                            limeAds.isAllowedToRequestAd = true
+                            LimeAds.userClicksCounter = 0
+                            LimeAds.prerollTimer = 0
+                            LimeAds.isDisposeAdImaAd = false
+                            LimeAds.isDisposeCalled = false
+                            fragmentState.onErrorState(context.resources.getString(R.string.no_ad_found_at_all), AdType.Google)
+                        } else {
                             limeAds.getNextAd(AdType.Google.typeSdk)
                         }
+                    }else {
+                        limeAds.getNextAd(AdType.Google.typeSdk)
                     }
                 }
             }

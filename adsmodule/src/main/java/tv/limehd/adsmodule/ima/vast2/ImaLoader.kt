@@ -68,11 +68,7 @@ class ImaLoader constructor(
             }else{
                 if(isTimeout){
                     adRequestListener?.onError(context.resources.getString(R.string.timeout_occurred), AdType.IMA)
-                    if(lastAd == AdType.IMA.typeSdk){
-                        fragmentState.onErrorState(context.resources.getString(R.string.no_ad_found_at_all), AdType.IMA)
-                    }else {
-                        limeAds.getNextAd(AdType.IMA.typeSdk)
-                    }
+                    limeAds.getNextAd(AdType.IMA.typeSdk)
                 }
             }
         }
@@ -128,11 +124,7 @@ class ImaLoader constructor(
         adRequestListener?.onError(adErrorEvent?.error?.message.toString(), AdType.IMA)
         adShowListener?.onError(adErrorEvent?.error?.message.toString(), AdType.IMA)
         if(!isTimeout) {
-            if (lastAd == AdType.IMA.typeSdk) {
-                fragmentState.onErrorState(context.getString(R.string.no_ad_found_at_all), AdType.IMA)
-            } else {
-                limeAds.getNextAd(AdType.IMA.typeSdk)
-            }
+            limeAds.getNextAd(AdType.IMA.typeSdk)
         }
     }
 

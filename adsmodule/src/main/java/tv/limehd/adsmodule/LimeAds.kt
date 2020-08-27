@@ -37,6 +37,7 @@ class LimeAds {
         private const val TAG = "LimeAds"
         private lateinit var myTargetFragment: MyTargetFragment
         private lateinit var fragmentState: FragmentState
+        var currentAdCounter = 1
         private var resId: Int = -1
         private var adsList = listOf<Ad>()
         private var limeAds: LimeAds? = null
@@ -77,6 +78,8 @@ class LimeAds {
             isDisposeCalled = true
 
             isBackgroundRequestsCalled = false
+
+            currentAdCounter = 1
 
             limeAds?.let {
                 it.adUiContainer = null
@@ -419,18 +422,29 @@ class LimeAds {
 
     fun getNextAd(currentAd: String) {
         var nextAd: String? = null
-        for(i in adsList.indices){
-            if(adsList[i].type_sdk == currentAd){
-                nextAd = adsList[i + 1].type_sdk
+
+        if(currentAdCounter == adsList.size){
+            Log.d(TAG, "getNextAd: NOT LOADING NEXT AD, BECAUSE ALREADY ON THE LAST AD")
+            context?.let {
+                fragmentState.onErrorState(it.getString(R.string.no_ad_found_at_all))
             }
-        }
-        Log.d(TAG, "Next ad after '$currentAd' is '$nextAd'")
-        when(nextAd){
-            AdType.Google.typeSdk -> getGoogleAd()
-            AdType.IMA.typeSdk -> getImaAd()
-            AdType.Yandex.typeSdk -> getYandexAd()
-            AdType.MyTarget.typeSdk -> getMyTargetAd()
-            AdType.IMADEVICE.typeSdk -> getImaDeviceAd()
+            limeAds?.isAllowedToRequestAd = true
+            prerollTimer = 0
+        }else {
+            currentAdCounter++
+            for (i in adsList.indices) {
+                if (adsList[i].type_sdk == currentAd) {
+                    nextAd = adsList[i + 1].type_sdk
+                }
+            }
+            Log.d(TAG, "Next ad after '$currentAd' is '$nextAd'")
+            when (nextAd) {
+                AdType.Google.typeSdk -> getGoogleAd()
+                AdType.IMA.typeSdk -> getImaAd()
+                AdType.Yandex.typeSdk -> getYandexAd()
+                AdType.MyTarget.typeSdk -> getMyTargetAd()
+                AdType.IMADEVICE.typeSdk -> getImaDeviceAd()
+            }
         }
     }
 

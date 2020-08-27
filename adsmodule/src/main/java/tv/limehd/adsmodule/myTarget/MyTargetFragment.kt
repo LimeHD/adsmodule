@@ -207,11 +207,7 @@ class MyTargetFragment(
                 Log.d(TAG, "onError called")
                 adShowListener?.onError(error, AdType.MyTarget)
                 fragmentManager?.beginTransaction()?.remove(this@MyTargetFragment)?.commit()
-                if(lastAd == AdType.MyTarget.typeSdk){
-                    fragmentState.onErrorState(context!!.resources.getString(R.string.no_ad_found_at_all), AdType.MyTarget)
-                }else{
-                    limeAds.getNextAd(AdType.MyTarget.typeSdk)
-                }
+                limeAds.getNextAd(AdType.MyTarget.typeSdk)
             }
 
             override fun onBannerComplete(p0: InstreamAd, p1: InstreamAd.InstreamAdBanner) {

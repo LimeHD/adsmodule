@@ -6,6 +6,6 @@ import tv.limehd.adsmodule.AdType
 interface FragmentState {
 
     fun onSuccessState(fragment: Fragment, owner: AdType)
-    fun onErrorState(message: String, owner: AdType)
+    fun onErrorState(message: String, owner: AdType? = null)
 
 }
