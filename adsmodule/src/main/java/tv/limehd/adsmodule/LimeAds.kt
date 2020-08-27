@@ -119,25 +119,30 @@ class LimeAds {
         @JvmOverloads
         @Throws(NullPointerException::class)
         fun startBackgroundRequests(context: Context, resId: Int, fragmentState: FragmentState, adRequestListener: AdRequestListener? = null, adShowListener: AdShowListener? = null) {
-            
+
             requireNotNull(limeAds) {
                 NullPointerException(Constants.libraryIsNotInitExceptionMessage)
             }
 
             isBackgroundRequestsCalled = true
 
-            if(isConnectionSpeedEnough(context)){
-                myTargetFragment = MyTargetFragment(limeAds!!.lastAd, resId, fragmentState, adRequestListener, adShowListener, limeAds!!)
-                val fragmentActivity = context as FragmentActivity
-                fragmentManager = fragmentActivity.supportFragmentManager
-                if(!MyTargetFragment.isShowingAd){
-                    fragmentManager.beginTransaction().replace(resId, myTargetFragment).commitAllowingStateLoss()
-                    fragmentManager.beginTransaction().hide(myTargetFragment).commitAllowingStateLoss()
+            if(limeAds!!.checkConnection) {
+                if(isConnectionSpeedEnough(context)){
+                    myTargetFragment = MyTargetFragment(limeAds!!.lastAd, resId, fragmentState, adRequestListener, adShowListener, limeAds!!)
+                    val fragmentActivity = context as FragmentActivity
+                    fragmentManager = fragmentActivity.supportFragmentManager
+                    if(!MyTargetFragment.isShowingAd){
+                        fragmentManager.beginTransaction().replace(resId, myTargetFragment).commitAllowingStateLoss()
+                        fragmentManager.beginTransaction().hide(myTargetFragment).commitAllowingStateLoss()
+                    }
+                    backgroundAdManger = BackgroundAdManger(context, resId, fragmentState, adShowListener, adRequestListener, preload, adsList, limeAds!!, fragmentManager, myTargetFragment)
+                    backgroundAdManger.startBackgroundRequests()
+                }else{
+                    Log.d(TAG, "startBackgroundRequests: not called, cause of the internet")
                 }
-                backgroundAdManger = BackgroundAdManger(context, resId, fragmentState, adShowListener, adRequestListener, preload, adsList, limeAds!!, fragmentManager, myTargetFragment)
-                backgroundAdManger.startBackgroundRequests()
-            }else{
-                Log.d(TAG, "startBackgroundRequests: not called, cause of the internet")
+            }else {
+                // do module job using handlers and timeouts
+                Log.d(TAG, "getAd: do module job using handlers and timeouts")
             }
         }
 
