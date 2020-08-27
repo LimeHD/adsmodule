@@ -553,14 +553,13 @@ class LimeAds {
     @Throws(NullPointerException::class)
     private fun getImaAd() {
         Log.d(TAG, "Load IMA ad")
-        context?.let { context ->
-            myTargetFragment.view?.let { view ->
-                val imaAdContainer = view.findViewById(R.id.imaAdFrameLayout) as FrameLayout
-                ima = Ima(context, Constants.testAdTagUrl, lastAd, resId, imaAdContainer, fragmentState, adRequestListener, adShowListener, this, myTargetFragment, fragmentManager)
-            }
-        } ?: throw NullPointerException("Context is null. Maybe you did not init library!")
-
-        loadAd(AdType.IMA)
+        if(myTargetFragment.view != null) {
+            val imaAdContainer = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout) as FrameLayout
+            ima = Ima(context!!, Constants.testAdTagUrl, lastAd, resId, imaAdContainer, fragmentState, adRequestListener, adShowListener, this, myTargetFragment, fragmentManager)
+            loadAd(AdType.IMA)
+        }else {
+            Log.d(TAG, "getImaAd: MyTargetFragment view is null")
+        }
     }
 
     /**
