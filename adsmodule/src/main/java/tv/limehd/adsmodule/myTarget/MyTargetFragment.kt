@@ -139,6 +139,8 @@ class MyTargetFragment(
 
                 limeAds.adUiContainer?.visibility = View.GONE
 
+                LimeAds.currentAdCounter = 1
+
                 if(LimeAds.isBackgroundRequestsCalled) {
                     // should restart BackgroundAdManager
                     BackgroundAdManger.clearVariables()

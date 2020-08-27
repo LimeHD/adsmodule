@@ -126,6 +126,7 @@ class GoogleLoader(
                 Log.d(TAG, "onAdClosed: called")
                 LimeAds.isDisposeAdImaAd = false
                 LimeAds.isDisposeCalled = false
+                LimeAds.currentAdCounter = 1
                 adShowListener?.onCompleteInterstitial()
 
                 if(isLoadInterstitial){

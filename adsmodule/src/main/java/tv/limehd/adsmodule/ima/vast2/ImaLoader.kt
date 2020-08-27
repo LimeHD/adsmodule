@@ -141,6 +141,7 @@ class ImaLoader constructor(
             AdEvent.AdEventType.ALL_ADS_COMPLETED -> {
                 Log.d(TAG, "ALL_ADS_COMPLETED")
                 viewGroup.visibility = View.INVISIBLE
+                LimeAds.currentAdCounter = 1
                 adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
 
                 if(LimeAds.isBackgroundRequestsCalled) {
