@@ -180,8 +180,7 @@ class LimeAds {
                   fragmentState: FragmentState,
                   isOnline: Boolean,
                   adRequestListener: AdRequestListener? = null,
-                  adShowListener: AdShowListener? = null,
-                  checkConnection: Boolean = true
+                  adShowListener: AdShowListener? = null
         ) {
 
             requireNotNull(limeAds) {
@@ -234,17 +233,28 @@ class LimeAds {
                         getAdFunCallAmount++
                         adRequestListener?.onEarlyRequest()
                     } else {
-                        if(isConnectionSpeedEnough(context)) {
-                            prerollTimer = preroll.epg_timer
-                            it.prerollTimerHandler.removeCallbacks(it.prerollTimerRunnable)
-                            it.isAllowedToRequestAd = false
-                            userClicksCounter = 0
-                            if(readyBackgroundSkd.isEmpty()){
-                                Log.d(TAG, "getAd: load ad in main thread")
-                                if(isDisposeCalled != null && isDisposeAdImaAd != null) {
-                                    if (isDisposeCalled!! && isDisposeAdImaAd!!) {
-                                        it.getGoogleAd()
-                                    } else {
+                        if(it.checkConnection) {
+                            if(isConnectionSpeedEnough(context)) {
+                                prerollTimer = preroll.epg_timer
+                                it.prerollTimerHandler.removeCallbacks(it.prerollTimerRunnable)
+                                it.isAllowedToRequestAd = false
+                                userClicksCounter = 0
+                                if(readyBackgroundSkd.isEmpty()){
+                                    Log.d(TAG, "getAd: load ad in main thread")
+                                    if(isDisposeCalled != null && isDisposeAdImaAd != null) {
+                                        if (isDisposeCalled!! && isDisposeAdImaAd!!) {
+                                            it.getGoogleAd()
+                                        } else {
+                                            when (adsList[0].type_sdk) {
+                                                AdType.Google.typeSdk -> it.getGoogleAd()
+                                                AdType.IMA.typeSdk -> it.getImaAd()
+                                                AdType.Yandex.typeSdk -> it.getYandexAd()
+                                                AdType.MyTarget.typeSdk -> it.getMyTargetAd()
+                                                AdType.IMADEVICE.typeSdk -> it.getImaDeviceAd()
+                                                else -> Log.d(TAG, "getAd: else branch in when expression")
+                                            }
+                                        }
+                                    }else {
                                         when (adsList[0].type_sdk) {
                                             AdType.Google.typeSdk -> it.getGoogleAd()
                                             AdType.IMA.typeSdk -> it.getImaAd()
@@ -255,23 +265,17 @@ class LimeAds {
                                         }
                                     }
                                 }else {
-                                    when (adsList[0].type_sdk) {
-                                        AdType.Google.typeSdk -> it.getGoogleAd()
-                                        AdType.IMA.typeSdk -> it.getImaAd()
-                                        AdType.Yandex.typeSdk -> it.getYandexAd()
-                                        AdType.MyTarget.typeSdk -> it.getMyTargetAd()
-                                        AdType.IMADEVICE.typeSdk -> it.getImaDeviceAd()
-                                        else -> Log.d(TAG, "getAd: else branch in when expression")
-                                    }
+                                    ReadyBackgroundAdDisplay(
+                                        readyBackgroundSkd, limeAds?.viewGroup!!, adRequestListener, adShowListener,
+                                        context, resId, fragmentState, limeAds!!, myTargetFragment, fragmentManager
+                                    ).showReadyAd()
                                 }
-                            }else {
-                                ReadyBackgroundAdDisplay(
-                                    readyBackgroundSkd, limeAds?.viewGroup!!, adRequestListener, adShowListener,
-                                    context, resId, fragmentState, limeAds!!, myTargetFragment, fragmentManager
-                                ).showReadyAd()
+                            }else{
+                                Log.d(TAG, "getAd: not called, cause of the internet")
                             }
-                        }else{
-                            Log.d(TAG, "getAd: not called, cause of the internet")
+                        }else {
+                            // do module job using handlers and timeouts
+                            Log.d(TAG, "getAd: do module job using handlers and timeouts")
                         }
                     }
                 }else {
