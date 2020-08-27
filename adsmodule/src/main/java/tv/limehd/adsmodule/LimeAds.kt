@@ -563,6 +563,10 @@ class LimeAds {
             loadAd(AdType.IMA)
         }else {
             Log.d(TAG, "getImaAd: MyTargetFragment view is null")
+            limeAds?.isAllowedToRequestAd = true
+            prerollTimer = 0
+            BackgroundAdManger.clearVariables()
+            adShowListener?.onComplete("MyTargetFragment view is null", AdType.IMA)
         }
     }
 

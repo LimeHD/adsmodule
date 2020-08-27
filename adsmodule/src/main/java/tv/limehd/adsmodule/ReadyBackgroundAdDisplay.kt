@@ -46,8 +46,18 @@ class ReadyBackgroundAdDisplay(
                 viewGroup.visibility = View.VISIBLE
                 val adsManager = BackgroundAdManger.imaAdsManager
                 myTargetFragment.setAdsManager(adsManager)
-                fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
-                fragmentState.onSuccessState(myTargetFragment, AdType.IMA)
+                val result = fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
+                if(result == -1) { // failure
+                    LimeAds.currentAdCounter = 1
+                    limeAds.isAllowedToRequestAd = true
+                    LimeAds.prerollTimer = 0
+                    limeAds.adUiContainer?.visibility = View.GONE
+                    BackgroundAdManger.clearVariables()
+                    adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
+                }else { // success
+                    fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
+                    fragmentState.onSuccessState(myTargetFragment, AdType.IMA)
+                }
             }
             AdType.MyTarget.typeSdk -> {
                 // show mytarget ad

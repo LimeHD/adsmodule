@@ -249,7 +249,7 @@ class BackgroundAdManger(
                     try {
                         fragmentManager.beginTransaction().remove(fragmentManager.fragments[1]).commitNow()
                     }catch (e: Exception){
-                        Log.d(TAG, "loadIma: ${e.message}")
+                        Log.d(TAG, "onAdClosed: ${e.message}")
                     }
 
                     adShowListener?.onCompleteInterstitial()
