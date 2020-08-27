@@ -32,6 +32,7 @@ class LimeAds {
     private var viewGroup: ViewGroup? = null
     private var context: Context? = null
     var adUiContainer: ViewGroup? = null
+    private var checkConnection: Boolean = true
 
     companion object {
         private const val TAG = "LimeAds"
@@ -98,6 +99,14 @@ class LimeAds {
             }
 
             limeAds?.context = null
+        }
+
+        @JvmStatic
+        @Throws(NullPointerException::class)
+        fun checkConnectionStatus(checkConnection: Boolean) {
+            limeAds?.let {
+                it.checkConnection = checkConnection
+            } ?: throw NullPointerException(Constants.libraryIsNotInitExceptionMessage)
         }
 
         /**
