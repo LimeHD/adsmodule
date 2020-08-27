@@ -171,7 +171,8 @@ class LimeAds {
                   fragmentState: FragmentState,
                   isOnline: Boolean,
                   adRequestListener: AdRequestListener? = null,
-                  adShowListener: AdShowListener? = null
+                  adShowListener: AdShowListener? = null,
+                  checkConnection: Boolean = true
         ) {
 
             requireNotNull(limeAds) {
