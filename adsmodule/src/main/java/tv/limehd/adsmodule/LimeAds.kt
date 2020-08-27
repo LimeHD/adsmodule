@@ -207,6 +207,15 @@ class LimeAds {
             }
             this.resId = resId
 
+            if(!isBackgroundRequestsCalled) {
+                myTargetFragment = MyTargetFragment(limeAds!!.lastAd, resId, fragmentState, adRequestListener, adShowListener, limeAds!!)
+                fragmentManager = fragmentActivity.supportFragmentManager
+                if (!MyTargetFragment.isShowingAd) {
+                    fragmentManager.beginTransaction().replace(resId, myTargetFragment).commitAllowingStateLoss()
+                    fragmentManager.beginTransaction().hide(myTargetFragment).commitAllowingStateLoss()
+                }
+            }
+
             if(!this::myTargetFragment.isInitialized) {
                 myTargetFragment = MyTargetFragment(limeAds!!.lastAd, Companion.resId, Companion.fragmentState, Companion.adRequestListener, Companion.adShowListener, limeAds!!)
                 fragmentManager.beginTransaction().replace(Companion.resId, myTargetFragment).commitAllowingStateLoss()
