@@ -320,7 +320,7 @@ class LimeAds {
          */
         @JvmStatic
         fun showAd(fragment: MyTargetFragment, owner: AdType){
-            fragmentManager.beginTransaction().replace(resId, fragment).commitAllowingStateLoss()
+            fragmentManager.beginTransaction().show(fragment).commitAllowingStateLoss()
             fragment.initializePlaying(owner)
         }
 

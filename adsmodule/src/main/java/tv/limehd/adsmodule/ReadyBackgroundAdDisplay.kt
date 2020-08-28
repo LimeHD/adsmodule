@@ -45,18 +45,11 @@ class ReadyBackgroundAdDisplay(
                 Log.d(TAG, "getAd: show ima from background")
                 viewGroup.visibility = View.VISIBLE
                 val adsManager = BackgroundAdManger.imaAdsManager
-                myTargetFragment.setAdsManager(adsManager)
-                val result = fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
-                if(result == -1) { // failure
-                    LimeAds.currentAdCounter = 1
-                    limeAds.isAllowedToRequestAd = true
-                    LimeAds.prerollTimer = 0
-                    limeAds.adUiContainer?.visibility = View.GONE
-                    BackgroundAdManger.clearVariables()
-                    adShowListener?.onComplete(context.getString(R.string.completed), AdType.IMA)
-                }else { // success
-                    fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
+                if(adsManager != null) {
+                    myTargetFragment.setAdsManager(adsManager)
                     fragmentState.onSuccessState(myTargetFragment, AdType.IMA)
+                }else {
+                    adRequestListener?.onEarlyRequest()
                 }
             }
             AdType.MyTarget.typeSdk -> {
