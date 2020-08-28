@@ -262,6 +262,7 @@ class MyTargetFragment(
             mInstreamAd.stop()
         }
         if(adsManager != null) {
+            adsManager?.pause()
             adsManager?.destroy()
         }
     }
