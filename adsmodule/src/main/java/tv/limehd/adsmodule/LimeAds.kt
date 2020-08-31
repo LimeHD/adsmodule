@@ -245,7 +245,7 @@ class LimeAds {
             }
 
             limeAds?.let {
-                if ((it.isAllowedToRequestAd || userClicksCounter >= 5) && prerollTimer <= 0) {
+                if ((it.isAllowedToRequestAd && prerollTimer <= 0) || userClicksCounter >= 5) {
                     if (skipFirst && getAdFunCallAmount == 0) {
                         Log.d(TAG, "getAd: skip first ad")
                         getAdFunCallAmount++
