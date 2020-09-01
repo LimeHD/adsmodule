@@ -1,9 +1,9 @@
 package tv.limehd.adsmodule
 
 sealed class AdType(val typeSdk: String) {
-    object MyTarget : AdType("mytarget")
-    object Yandex : AdType("yandex")
-    object Google : AdType("google")
-    object IMA : AdType("ima")
-    object IMADEVICE : AdType("ima-device")
+    class MyTarget : AdType("mytarget")
+    class Yandex : AdType("yandex")
+    class Google : AdType("google")
+    class IMA : AdType("ima")
+    class IMADEVICE : AdType("ima-device")
 }
