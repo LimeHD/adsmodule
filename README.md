@@ -100,7 +100,7 @@ LimeAds.getAd(context, R.id.main_container, fragmentStateCallback, isOnline, adR
 ### 2. Получить рекламу от межстраницы Google
 Функция нужна когда пользователь вышел из полноэкранного режима, чтобы показать межстраничку Google. Функция должна быть вызвана после инициализации библиотеки. Иначе выброситься exception
 ``` js
-LimeAds.getGoogleInterstitialAd()
+LimeAds.getGoogleInterstitialAd(context, fragmentStateCallback, adRequestCallback, adShowCallback)
 ```
 
 ### 3. Добавить FragmentState
@@ -111,15 +111,17 @@ LimeAds.getAd(context, R.id.main_container, fragmentStateCallback, isOnline, adR
 ``` kotlin
 private FragmentState fragmentStateCallback = new FragmentState() {
     @Override
-    public void onSuccessState(@NotNull Fragment fragment) {
+    public void onSuccessState(@NotNull Fragment fragment, @NotNull AdType owner) {
         // положительный ответ. fragment с рекламой
         // Чтобы показать рекламу. Просто вызовите функцию
-        LimeAds.showAd(fragment);
+        LimeAds.showAd((MyTargetFragment) fragment, owner);
     }
 
     @Override
-    public void onErrorState(@NotNull String message) {
+    public void onErrorState(@NotNull String message, @Nullable AdType owner) {
         // отрицательный ответ. message - сообщение с ошибкой
+        // стартуем плеер, так как никакой рекламы нет
+        startPlayer("error state");
     }
 };
 ```
@@ -132,6 +134,18 @@ private FragmentState fragmentStateCallback = new FragmentState() {
 - **owner**: реклама от которой пришло событие (AdType.IMA)
 ``` kotlin
     private AdRequestListener adRequestCallback = new AdRequestListener() {
+        @Override
+        public void onEarlyRequest() {
+            // вызывается, когда каннал был сменён, но handler с timeout еще запушен
+            startPlayer("adRequestListener");
+        }
+
+        @Override
+        public void onEarlyRequestInterstitial() {
+            // вызывается, когда была запрошена межстраничка гугла, но handler для гугла с timeout еще запушен
+            exitFromFullscreen();
+        }
+        
         @Override
         public void onRequest(@NotNull String message, @NotNull AdType owner) {
             // совершен запрос
@@ -162,6 +176,9 @@ private FragmentState fragmentStateCallback = new FragmentState() {
         @Override
         public void onShow(@NotNull String message, @NotNull AdType owner) {
             // показа рекламы начался
+            if(owner.getTypeSdk().equals("google")){
+                isFullscreenBannerShown = true;
+            }
         }
 
         @Override
@@ -172,6 +189,7 @@ private FragmentState fragmentStateCallback = new FragmentState() {
         @Override
         public void onComplete(@NotNull String message, @NotNull AdType owner) {
             // реклама закончила своё воспроизведение
+            startPlayer("onComplete");
         }
 
         @Override
@@ -182,6 +200,11 @@ private FragmentState fragmentStateCallback = new FragmentState() {
         @Override
         public void onClick(@NotNull String message, @NotNull AdType owner) {
             // соверешнно нажатие на контейнер с рекламой
+        }
+        
+        @Override
+        public void onCompleteInterstitial() {
+            // межстраничка гугла закончила своё воспроизведение
         }
     };
 ```
