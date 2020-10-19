@@ -54,11 +54,39 @@ class Constants {
                 "        },\n" +
                 "        {\n" +
                 "            \"id\": 26,\n" +
-                "            \"url\": \"https://ads.hyperadx.com/v2/vast/b3Qn1BKM?v=3.0&device.ua={UA}&device.ip={IP}&device.ifa={GAID}&app.bundle={app.bundle}&app.cat={app.cat}&app.name={app.name}&app.storeurl={app.storeurl}&imp.video.w={player.widht}&imp.video.h={player.height}&device.geo.lat={device.geo.lat}&device.geo.lon={device.geo.lon}&regs.ext.coppa={COPPA}&regs.ext.gdpr={GDPR}&device.connectiontype={ConnectionType}&cb={cb}&device.os=(device.os}\",\n" +
+                "            \"url\": \"https://ads.hyperadx.com/v2/vast/b3Qn1BKM?v=3.0&device.ua=com.infolink.limeiptv&device.ip=85.234.0.52&device.ifa=81d24299-dccb-47e0-a4c5-fcc9ecdeae11&app.bundle=com.infolink.limeiptv&app.cat=intertainment&app.name=\",\n" +
                 "            \"is_onl\": 1,\n" +
                 "            \"is_arh\": 1,\n" +
                 "            \"type_sdk\": \"ima\",\n" +
-                "            \"type_identity\": \"getintent\",\n" +
+                "            \"type_identity\": \"hyperaudience\",\n" +
+                "            \"type_block\": 10,\n" +
+                "            \"type_device\": 10,\n" +
+                "            \"orientation\": 10,\n" +
+                "            \"code\": \"\",\n" +
+                "            \"enable_cache\": true,\n" +
+                "            \"window\": 99\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 7,\n" +
+                "            \"url\": \"https://adddd.adriver.ru/cgi-bin/rle.cgi?sid=216288&bt=61&pz=0&target=blank&tuid=1&rnd=1484434468\",\n" +
+                "            \"is_onl\": 1,\n" +
+                "            \"is_arh\": 1,\n" +
+                "            \"type_sdk\": \"ima\",\n" +
+                "            \"type_identity\": \"adriver\",\n" +
+                "            \"type_block\": 10,\n" +
+                "            \"type_device\": 10,\n" +
+                "            \"orientation\": 10,\n" +
+                "            \"code\": \"\",\n" +
+                "            \"enable_cache\": true,\n" +
+                "            \"window\": 99\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"id\": 100,\n" +
+                "            \"url\": \"\",\n" +
+                "            \"is_onl\": 1,\n" +
+                "            \"is_arh\": 1,\n" +
+                "            \"type_sdk\": \"yandex\",\n" +
+                "            \"type_identity\": \"adFox\",\n" +
                 "            \"type_block\": 10,\n" +
                 "            \"type_device\": 10,\n" +
                 "            \"orientation\": 10,\n" +
