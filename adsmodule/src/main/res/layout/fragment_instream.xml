@@ -5,11 +5,15 @@
     android:layout_height="match_parent"
     android:background="@color/colorBlack">
 
-        <FrameLayout
-        android:id="@+id/imaAdFrameLayout"
+    <VideoView
+        android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <FrameLayout
+        android:id="@+id/imaAdFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <RelativeLayout
         android:id="@+id/video_container"
