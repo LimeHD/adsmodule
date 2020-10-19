@@ -91,6 +91,19 @@ class ReadyBackgroundAdDisplay(
                 val interstitial = BackgroundAdManger.googleInterstitialAd
                 interstitial!!.show()
             }
+            AdType.AdFox.typeSdk -> {
+                // show adFox ad
+                Log.d(TAG, "showReadyAd: show AD FOX from background")
+                viewGroup.visibility = View.VISIBLE
+                val mediaFile = BackgroundAdManger.mediaFile
+                if(mediaFile != null) {
+                    myTargetFragment.setMediaFile(mediaFile)
+                    fragmentManager.beginTransaction().show(myTargetFragment).commitAllowingStateLoss()
+                    fragmentState.onSuccessState(myTargetFragment, AdType.AdFox)
+                }else{
+                    adRequestListener?.onEarlyRequest()
+                }
+            }
         }
     }
 

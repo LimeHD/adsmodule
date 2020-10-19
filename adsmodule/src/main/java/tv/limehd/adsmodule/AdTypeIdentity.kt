@@ -7,5 +7,6 @@ sealed class AdTypeIdentity(val typeIdentity: String) {
     object VideoNow : AdTypeIdentity("videonow")
     object Hyperaudience : AdTypeIdentity("hyperaudience")
     object Adriver : AdTypeIdentity("adriver")
+    object AdFox : AdTypeIdentity("adFox")
 
 }

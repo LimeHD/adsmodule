@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.VideoView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -14,6 +15,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Runnable
 import org.json.JSONObject
+import tv.limehd.adsmodule.adFox.AdFoxLoader
 import tv.limehd.adsmodule.google.Google
 import tv.limehd.adsmodule.ima.Ima
 import tv.limehd.adsmodule.ima.vast2.ImaFragment
@@ -31,6 +33,7 @@ import tv.limehd.adsmodule.myTarget.MyTargetFragment
 class LimeAds {
 
     private var viewGroup: ViewGroup? = null
+    var mVideoView: VideoView? = null
     private var context: Context? = null
     var adUiContainer: ViewGroup? = null
     private var checkConnection: Boolean = true
@@ -88,6 +91,7 @@ class LimeAds {
             limeAds?.let {
                 it.adUiContainer = null
                 it.viewGroup = null
+                it.mVideoView = null
 
                 if(it.getReadyAd() == AdType.IMA.typeSdk) {
                     isDisposeAdImaAd = true
@@ -233,8 +237,11 @@ class LimeAds {
             userClicksCounter++
             Log.d(TAG, "userClicks: $userClicksCounter")
 
+            limeAds?.mVideoView = myTargetFragment.view?.findViewById(R.id.video_view)
+
             if(myTargetFragment.view != null) {
                 BackgroundAdManger.myTargetFragmentFrameLayout = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout)
+                limeAds?.mVideoView = myTargetFragment.view?.findViewById(R.id.video_view)
             }
 
             val readyBackgroundSkd = limeAds!!.getReadyAd()
@@ -408,6 +415,9 @@ class LimeAds {
         if(BackgroundAdManger.googleInterstitialAd != null){
             readySdk = AdType.Google.typeSdk
         }
+        if(BackgroundAdManger.mediaFile != null){
+            readySdk = AdType.AdFox.typeSdk
+        }
         return readySdk
     }
 
@@ -499,6 +509,21 @@ class LimeAds {
                 AdTypeIdentity.Adriver.typeIdentity -> getImaAd(tagUrl, nextAd)
                 AdTypeIdentity.Hyperaudience.typeIdentity -> getImaAd(tagUrl, nextAd)
                 AdTypeIdentity.VideoNow.typeIdentity -> getImaAd(tagUrl, nextAd)
+                AdTypeIdentity.AdFox.typeIdentity -> getAdFoxAd()
+            }
+        }
+    }
+
+    private fun getAdFoxAd() {
+        val pageId = "634713"
+        val params = hashMapOf<String, String>().apply {
+            this["p1"] = "cmilp"
+            this["p2"] = "gmjh"
+        }
+        context?.let { context ->
+            mVideoView?.let { videoView ->
+                val adFoxLoader = AdFoxLoader(context, params, pageId, videoView, adRequestListener, adShowListener)
+                adFoxLoader.loadVmap()
             }
         }
     }

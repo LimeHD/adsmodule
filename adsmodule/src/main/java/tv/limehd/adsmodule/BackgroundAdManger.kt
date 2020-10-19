@@ -14,6 +14,11 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.my.target.instreamads.InstreamAd
+import com.yandex.mobile.ads.video.*
+import com.yandex.mobile.ads.video.models.ad.Creative
+import com.yandex.mobile.ads.video.models.ad.MediaFile
+import com.yandex.mobile.ads.video.models.ad.VideoAd
+import com.yandex.mobile.ads.video.models.vmap.Vmap
 import kotlinx.coroutines.*
 import tv.limehd.adsmodule.interfaces.AdLoader
 import tv.limehd.adsmodule.interfaces.AdRequestListener
@@ -44,6 +49,8 @@ class BackgroundAdManger(
         var imaAdsManager: AdsManager? = null
         var myTargetInstreamAd: InstreamAd? = null
         var googleInterstitialAd: InterstitialAd? = null
+        var mediaFile: MediaFile? = null
+        var creative: Creative? = null
 
         var myTargetFragmentFrameLayout: FrameLayout? = null
 
@@ -51,6 +58,50 @@ class BackgroundAdManger(
             googleInterstitialAd = null
             imaAdsManager = null
             myTargetInstreamAd = null
+            mediaFile = null
+            creative = null
+        }
+    }
+
+    // ***************************************************** Ad Fox ********************************************************* //
+    private suspend fun loadAdFox() : Boolean {
+        Log.d(TAG, "loadAdFox: called")
+        val pageId = "634713"
+        val params = hashMapOf<String, String>().apply {
+            this["p1"] = "cmilp"
+            this["p2"] = "gmjh"
+        }
+        val vmapLoader = VmapLoader(context)
+        val vmapRequestConfiguration = VmapRequestConfiguration.Builder(pageId).build()
+        vmapLoader.loadVmap(context, vmapRequestConfiguration)
+        return suspendCoroutine { cont ->
+            vmapLoader.setOnVmapLoadedListener(object : VmapLoader.OnVmapLoadedListener() {
+                override fun onVmapLoaded(vmap: Vmap) {
+                    Log.d(TAG, "onVmapLoaded: Vmap is loaded")
+                    val vastRequestConfiguration = VastRequestConfiguration.Builder(vmap.adBreaks[0]).setParameters(params).build()
+                    val videoAdLoader = VideoAdLoader(context)
+                    videoAdLoader.loadAd(context, vastRequestConfiguration)
+                    videoAdLoader.setOnVideoAdLoadedListener(object : VideoAdLoader.OnVideoAdLoadedListener() {
+                        override fun onVideoAdLoaded(videoAds: MutableList<VideoAd>) {
+                            Log.d(TAG, "onVideoAdLoaded: video ad is loaded")
+                            val mediaFiles = videoAds[0].creatives[0].mediaFiles
+                            creative = videoAds[0].creatives[0]
+                            mediaFile = mediaFiles[0]
+                            cont.resume(true)
+                        }
+
+                        override fun onVideoAdFailedToLoad(videoAdError: VideoAdError) {
+                            Log.d(TAG, "onVideoAdFailedToLoad: ${videoAdError.description}")
+                            cont.resume(false)
+                        }
+                    })
+                }
+
+                override fun onVmapFailedToLoad(vmapError: VmapError) {
+                    Log.d(TAG, "onVmapFailedToLoad: Vmap is not loaded has ${vmapError.description}")
+                    cont.resume(false)
+                }
+            })
         }
     }
 
@@ -285,6 +336,9 @@ class BackgroundAdManger(
         if(googleInterstitialAd != null){
             readySdk = AdType.Google.typeSdk
         }
+        if(mediaFile != null) {
+            readySdk = AdType.AdFox.typeSdk
+        }
         return readySdk
     }
 
@@ -362,6 +416,14 @@ class BackgroundAdManger(
                             }else {
                                 Log.d(TAG, "backgroundAdLogic: loading VideoNow...")
                                 result = loadIma(ad.url)
+                            }
+                        }
+                        AdTypeIdentity.AdFox.typeIdentity -> {
+                            if(result){
+                                this.cancel()
+                            }else {
+                                Log.d(TAG, "backgroundAdLogic: loading AdFox...")
+                                result = loadAdFox()
                             }
                         }
                     }

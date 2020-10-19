@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import com.google.ads.interactivemedia.v3.api.AdsManager
 import com.my.target.instreamads.InstreamAd
 import com.my.target.instreamads.InstreamAdPlayer
+import com.yandex.mobile.ads.video.models.ad.MediaFile
+import kotlinx.android.synthetic.main.fragment_instream.*
 import tv.limehd.adsmodule.*
 import tv.limehd.adsmodule.interfaces.AdRequestListener
 import tv.limehd.adsmodule.interfaces.AdShowListener
@@ -45,6 +47,12 @@ class MyTargetFragment(
     private lateinit var leftHandler: Handler
 
     private var adsManager: AdsManager? = null
+
+    private lateinit var mediaFile: MediaFile
+
+    fun setMediaFile(mediaFile: MediaFile) {
+        this.mediaFile = mediaFile
+    }
 
     private var leftRunnable: Runnable = object : Runnable {
         override fun run() {
@@ -96,14 +104,36 @@ class MyTargetFragment(
         buttonSkip = rootView.findViewById(R.id.btn_skip)
         // Skip button
         buttonSkip.setOnClickListener {
-            adShowListener?.onSkip(this.getString(R.string.skipped), AdType.MyTarget)
-            mInstreamAd.skip()
+            if(this::mInstreamAd.isInitialized) {
+                adShowListener?.onSkip(this.getString(R.string.skipped), AdType.MyTarget)
+                mInstreamAd.skip()
+            }
+            if(this::mediaFile.isInitialized) {
+                adShowListener?.onSkip(this.getString(R.string.skipped), AdType.AdFox)
+                completeAdFox()
+            }
         }
         // Ad Click
         rootContainer.setOnClickListener {
             adShowListener?.onClick(this.getString(R.string.clicked), AdType.MyTarget)
         }
         return rootView
+    }
+
+    private fun completeAdFox() {
+        limeAds.adUiContainer?.visibility = View.GONE
+
+        LimeAds.currentAdCounter = 1
+
+        if(LimeAds.isBackgroundRequestsCalled) {
+            // should restart BackgroundAdManager
+            BackgroundAdManger.clearVariables()
+            LimeAds.startBackgroundRequests(context!!, resId, fragmentState, adRequestListener, adShowListener)
+        }else {
+            Log.d(TAG, "BACKGROUND REQUEST ARE NOT STARTED")
+        }
+        adShowListener?.onComplete(this@MyTargetFragment.getString(R.string.completed), AdType.AdFox)
+        limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
     }
 
     fun initializePlaying(adType: AdType){
@@ -113,6 +143,46 @@ class MyTargetFragment(
                 adsManager?.start()
             }
             is AdType.MyTarget -> mInstreamAd.startPreroll()
+            is AdType.AdFox -> {
+                Log.d(TAG, "initializePlaying: showing AD FOX in MyTargetFragment")
+                video_view.apply {
+                    setVideoPath(mediaFile.uri)
+                    start()
+                }
+
+                video_view.setOnPreparedListener {
+//                    adShowListener?.onShow(this@MyTargetFragment.getString(R.string.showing), AdType.AdFox)
+                    leftTimeText.visibility = View.VISIBLE
+                    leftTimeText.bringToFront()
+
+                    leftTimeDelay = (BackgroundAdManger.creative?.durationMillis!! / 1000).toFloat()
+                    leftHandler = Handler()
+                    val leftText = "Осталось ${BackgroundAdManger.creative?.durationMillis!! / 1000} сек."
+                    leftTimeText.text = leftText
+                    leftHandler.postDelayed(leftRunnable, 1000)
+
+                    skipAllowDelay = 5f
+
+                    buttonSkip.isEnabled = false
+                    buttonSkip.visibility = View.VISIBLE
+                    val skipText = "Пропустить через " + skipAllowDelay.toInt() + " сек."
+                    buttonSkip.text = skipText
+                    skipHandler = Handler()
+                    skipHandler.postDelayed(skipRunnable, 1000)
+                }
+
+                video_view.setOnCompletionListener {
+                    completeAdFox()
+                }
+
+                video_view.setOnErrorListener { _, what, _ ->
+                    Log.d(TAG, "onError called from AdFox")
+                    adShowListener?.onError(what.toString(), AdType.AdFox)
+                    fragmentManager?.beginTransaction()?.remove(this@MyTargetFragment)?.commit()
+                    limeAds.getNextAd(AdTypeIdentity.AdFox.typeIdentity)
+                    true
+                }
+            }
         }
     }
 

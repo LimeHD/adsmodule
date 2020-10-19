@@ -6,4 +6,5 @@ sealed class AdType(val typeSdk: String) {
     class Google : AdType("google")
     class IMA : AdType("ima")
     class IMADEVICE : AdType("ima-device")
+    object AdFox : AdType("adFox")
 }
