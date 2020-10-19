@@ -330,7 +330,7 @@ class BackgroundAdManger(
                             if(result){
                                 this.cancel()
                             }else {
-                                // TODO("result = loadGoogleAd()")
+                                result = loadGoogleAd()
                             }
                         }
                         AdTypeIdentity.Hyperaudience.typeIdentity -> {
@@ -352,7 +352,7 @@ class BackgroundAdManger(
                             if(result){
                                 this.cancel()
                             }else {
-                                // TODO("result = loadMyTargetAd()")
+                                result = loadMyTarget()
                             }
                         }
                         AdTypeIdentity.VideoNow.typeIdentity -> {
