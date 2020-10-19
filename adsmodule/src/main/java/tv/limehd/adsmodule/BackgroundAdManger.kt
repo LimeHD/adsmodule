@@ -60,7 +60,7 @@ class BackgroundAdManger(
     private lateinit var mSdkSetting: ImaSdkSettings
     private lateinit var mAdsLoader: AdsLoader
 
-    private suspend fun loadIma(container: ViewGroup) : Boolean {
+    private suspend fun loadIma(imaAdUrl: String) : Boolean {
         Log.d(TAG, "loadIma: called")
 
         var adContainer = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout) as FrameLayout?
@@ -79,7 +79,7 @@ class BackgroundAdManger(
         mAdsLoader = mSdkFactory.createAdsLoader(context, mSdkSetting, adDisplayContainer)
 
         val adsRequest = mSdkFactory.createAdsRequest()
-        adsRequest.adTagUrl = Constants.testAdTagUrl
+        adsRequest.adTagUrl = imaAdUrl
         adsRequest.adDisplayContainer = adDisplayContainer
 
         adsRequest.contentProgressProvider = ContentProgressProvider {
@@ -337,15 +337,14 @@ class BackgroundAdManger(
                             if(result){
                                 this.cancel()
                             }else {
-                                // TODO("result = loadHyperaudienceAd()")
+                                result = loadIma(ad.url)
                             }
                         }
                         AdTypeIdentity.Adriver.typeIdentity -> {
                             if(result){
                                 this.cancel()
                             }else {
-                                result = loadGoogleAd()
-                                // TODO("result = loadAdriverAd()")
+                                result = loadIma(ad.url)
                             }
                         }
                         AdTypeIdentity.MyTarget.typeIdentity -> {
@@ -359,7 +358,7 @@ class BackgroundAdManger(
                             if(result){
                                 this.cancel()
                             }else {
-                                // TODO("result = loadVideoNowAd()")
+                                result = loadIma(ad.url)
                             }
                         }
                     }
