@@ -105,14 +105,14 @@ class BackgroundAdManger(
                             limeAds.adUiContainer?.visibility = View.GONE
 
                             // should restart BackgroundAdManager
-//                            BackgroundAdManger.clearVariables()
-//                            LimeAds.startBackgroundRequests(
-//                                context,
-//                                resId,
-//                                fragmentState,
-//                                adRequestListener,
-//                                adShowListener
-//                            )
+                            clearVariables()
+                            LimeAds.startBackgroundRequests(
+                                context,
+                                resId,
+                                fragmentState,
+                                adRequestListener,
+                                adShowListener
+                            )
 
                             // should start preroll handler
                             limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
@@ -240,8 +240,8 @@ class BackgroundAdManger(
                     limeAds.adUiContainer?.visibility = View.GONE
 
                     // should restart BackgroundAdManager
-//                    clearVariables()
-//                    LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
+                    clearVariables()
+                    LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
 
                     // should start preroll handler
                     limeAds.prerollTimerHandler.postDelayed(limeAds.prerollTimerRunnable, 1000)
