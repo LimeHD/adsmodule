@@ -40,10 +40,10 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 
     // Библиотеки для подключения myTarget
-    implementation "com.yandex.android:mobileads:2.143"
-    implementation "com.yandex.android:mobmetricalib:3.13.1"
-    implementation "com.yandex.ads.mediation:mobileads-mytarget:1.6.0"
-    implementation "com.my.target:mytarget-sdk:5.7.1"
+    implementation 'com.yandex.android:mobmetricalib:3.14.3'
+    implementation 'com.yandex.android:mobileads:3.0.0'
+    implementation 'com.google.ads.mediation:mytarget:5.8.4.0'
+    implementation "com.my.target:mytarget-sdk:5.8.4"
 
     // Gson Converter Library
     implementation "com.google.code.gson:gson:2.8.6"
