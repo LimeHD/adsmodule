@@ -325,26 +325,41 @@ class BackgroundAdManger(
             for (i in 0 until preload.count) {
                 // loop through each ad in the iteration
                 for(ad in adsList){
-                    when(ad.type_sdk){
-                        AdType.IMA.typeSdk -> {
+                    when(ad.type_identity){
+                        AdTypeIdentity.Google.typeIdentity -> {
                             if(result){
                                 this.cancel()
                             }else {
-                                result = loadIma(viewGroup)
+                                // TODO("result = loadGoogleAd()")
                             }
                         }
-                        AdType.MyTarget.typeSdk -> {
+                        AdTypeIdentity.Hyperaudience.typeIdentity -> {
                             if(result){
                                 this.cancel()
                             }else {
-                                result = loadMyTarget()
+                                // TODO("result = loadHyperaudienceAd()")
                             }
                         }
-                        AdType.Google.typeSdk -> {
+                        AdTypeIdentity.Adriver.typeIdentity -> {
                             if(result){
                                 this.cancel()
                             }else {
                                 result = loadGoogleAd()
+                                // TODO("result = loadAdriverAd()")
+                            }
+                        }
+                        AdTypeIdentity.MyTarget.typeIdentity -> {
+                            if(result){
+                                this.cancel()
+                            }else {
+                                // TODO("result = loadMyTargetAd()")
+                            }
+                        }
+                        AdTypeIdentity.VideoNow.typeIdentity -> {
+                            if(result){
+                                this.cancel()
+                            }else {
+                                // TODO("result = loadVideoNowAd()")
                             }
                         }
                     }
