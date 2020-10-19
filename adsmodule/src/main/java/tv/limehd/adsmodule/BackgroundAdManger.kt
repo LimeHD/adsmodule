@@ -337,6 +337,7 @@ class BackgroundAdManger(
                             if(result){
                                 this.cancel()
                             }else {
+                                Log.d(TAG, "backgroundAdLogic: loading Hyperaudience...")
                                 result = loadIma(ad.url)
                             }
                         }
@@ -344,6 +345,7 @@ class BackgroundAdManger(
                             if(result){
                                 this.cancel()
                             }else {
+                                Log.d(TAG, "backgroundAdLogic: loading Adriver...")
                                 result = loadIma(ad.url)
                             }
                         }
@@ -358,6 +360,7 @@ class BackgroundAdManger(
                             if(result){
                                 this.cancel()
                             }else {
+                                Log.d(TAG, "backgroundAdLogic: loading VideoNow...")
                                 result = loadIma(ad.url)
                             }
                         }
