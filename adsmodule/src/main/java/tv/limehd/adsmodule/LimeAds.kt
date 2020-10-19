@@ -71,6 +71,7 @@ class LimeAds {
         @JvmField
         var isDisposeAdImaAd: Boolean? = null
         var isBackgroundRequestsCalled = false
+        var mClientIp = ""
 
         @JvmStatic
         @Throws(NullPointerException::class)
@@ -374,6 +375,10 @@ class LimeAds {
                 return false
             }
             return true
+        }
+
+        fun setClientIp(ip: String) {
+            mClientIp = ip
         }
 
     }
