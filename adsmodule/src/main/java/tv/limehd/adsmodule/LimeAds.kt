@@ -378,10 +378,12 @@ class LimeAds {
             return true
         }
 
+        @JvmStatic
         fun setClientIp(ip: String) {
             mClientIp = ip
         }
 
+        @JvmStatic
         fun setAdvertisingId(id: String) {
             mAdvertisingId = id
         }
