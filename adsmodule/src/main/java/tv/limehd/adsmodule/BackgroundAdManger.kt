@@ -67,6 +67,7 @@ class BackgroundAdManger(
     private suspend fun loadAdFox() : Boolean {
         Log.d(TAG, "loadAdFox: called")
         val pageId = "634713"
+//        val pageId = "111111"
         val params = hashMapOf<String, String>().apply {
             this["p1"] = "cmilp"
             this["p2"] = "gmjh"

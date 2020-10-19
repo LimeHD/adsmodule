@@ -276,7 +276,7 @@ class LimeAds {
                                             when (adsList[0].type_sdk) {
                                                 AdType.Google.typeSdk -> it.getGoogleAd()
                                                 AdType.IMA.typeSdk -> it.getImaAd(adsList[0].url, adsList[0].type_identity)
-                                                AdType.Yandex.typeSdk -> it.getYandexAd()
+                                                AdType.Yandex.typeSdk -> it.getAdFoxAd()
                                                 AdType.MyTarget.typeSdk -> it.getMyTargetAd()
                                                 AdType.IMADEVICE.typeSdk -> it.getImaDeviceAd()
                                                 else -> Log.d(TAG, "getAd: else branch in when expression")
@@ -286,7 +286,7 @@ class LimeAds {
                                         when (adsList[0].type_sdk) {
                                             AdType.Google.typeSdk -> it.getGoogleAd()
                                             AdType.IMA.typeSdk -> it.getImaAd(adsList[0].url, adsList[0].type_identity)
-                                            AdType.Yandex.typeSdk -> it.getYandexAd()
+                                            AdType.Yandex.typeSdk -> it.getAdFoxAd()
                                             AdType.MyTarget.typeSdk -> it.getMyTargetAd()
                                             AdType.IMADEVICE.typeSdk -> it.getImaDeviceAd()
                                             else -> Log.d(TAG, "getAd: else branch in when expression")
@@ -515,6 +515,7 @@ class LimeAds {
     }
 
     private fun getAdFoxAd() {
+        Log.d(TAG, "getAdFoxAd: called")
         val pageId = "634713"
         val params = hashMapOf<String, String>().apply {
             this["p1"] = "cmilp"
@@ -524,7 +525,7 @@ class LimeAds {
             mVideoView?.let { videoView ->
                 val adFoxLoader = AdFoxLoader(context, params, pageId, videoView, adRequestListener, adShowListener)
                 adFoxLoader.loadVmap()
-            }
+            } ?: adRequestListener?.onEarlyRequest()
         }
     }
 
