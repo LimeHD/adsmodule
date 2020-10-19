@@ -497,7 +497,7 @@ class LimeAds {
         }else {
             currentAdCounter++
             for (i in adsList.indices) {
-                if (adsList[i].type_identity == currentAd) {
+                if (i != adsList.size - 1 && adsList[i].type_identity == currentAd) {
                     nextAd = adsList[i + 1].type_identity
                     tagUrl = adsList[i + 1].url
                 }
@@ -510,6 +510,7 @@ class LimeAds {
                 AdTypeIdentity.Hyperaudience.typeIdentity -> getImaAd(tagUrl, nextAd)
                 AdTypeIdentity.VideoNow.typeIdentity -> getImaAd(tagUrl, nextAd)
                 AdTypeIdentity.AdFox.typeIdentity -> getAdFoxAd()
+                null -> adRequestListener?.onEarlyRequest()
             }
         }
     }
