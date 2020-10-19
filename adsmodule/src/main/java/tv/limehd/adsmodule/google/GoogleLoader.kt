@@ -6,11 +6,8 @@ import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
-import tv.limehd.adsmodule.AdType
-import tv.limehd.adsmodule.BackgroundAdManger
+import tv.limehd.adsmodule.*
 import tv.limehd.adsmodule.Constants.Companion.TIMEOUT
-import tv.limehd.adsmodule.LimeAds
-import tv.limehd.adsmodule.R
 import tv.limehd.adsmodule.interfaces.AdRequestListener
 import tv.limehd.adsmodule.interfaces.AdShowListener
 import tv.limehd.adsmodule.interfaces.FragmentState
@@ -54,7 +51,7 @@ class GoogleLoader(
                 if(isTimeout){
                     adRequestListener?.onError(context.resources.getString(R.string.timeout_occurred), AdType.Google)
                     if(!isLoadInterstitial) {
-                        limeAds.getNextAd(AdType.Google.typeSdk)
+                        limeAds.getNextAd(AdTypeIdentity.Google.typeIdentity)
                     }
                 }
             }
@@ -105,7 +102,7 @@ class GoogleLoader(
 
                 if(!isLoadInterstitial) {
                     Log.d(TAG, "onAdFailedToLoad: error from google. should load next ad")
-                    limeAds.getNextAd(AdType.Google.typeSdk)
+                    limeAds.getNextAd(AdTypeIdentity.Google.typeIdentity)
                 }
             }
 
@@ -125,8 +122,8 @@ class GoogleLoader(
 
                     if(LimeAds.isBackgroundRequestsCalled) {
                         // should restart BackgroundAdManager
-                        BackgroundAdManger.clearVariables()
-                        LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
+//                        BackgroundAdManger.clearVariables()
+//                        LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
                     }else {
                         Log.d(TAG, "BACKGROUND REQUEST ARE NOT STARTED")
                     }

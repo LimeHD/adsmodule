@@ -31,7 +31,8 @@ class Ima(private val context: Context,
           private val adShowListener: AdShowListener?,
           private val limeAds: LimeAds,
           private val myTargetFragment: MyTargetFragment,
-          private val fragmentManager: FragmentManager
+          private val fragmentManager: FragmentManager,
+          private val adTypeIdentity: String
 ) {
 
     fun loadAd() {
@@ -45,7 +46,8 @@ class Ima(private val context: Context,
             adShowListener,
             limeAds,
             myTargetFragment,
-            fragmentManager
+            fragmentManager,
+            adTypeIdentity
         )
         imaLoader.loadImaAd(fragmentState)
     }

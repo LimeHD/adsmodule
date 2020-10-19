@@ -13,10 +13,7 @@ import androidx.fragment.app.Fragment
 import com.google.ads.interactivemedia.v3.api.AdsManager
 import com.my.target.instreamads.InstreamAd
 import com.my.target.instreamads.InstreamAdPlayer
-import tv.limehd.adsmodule.AdType
-import tv.limehd.adsmodule.BackgroundAdManger
-import tv.limehd.adsmodule.LimeAds
-import tv.limehd.adsmodule.R
+import tv.limehd.adsmodule.*
 import tv.limehd.adsmodule.interfaces.AdRequestListener
 import tv.limehd.adsmodule.interfaces.AdShowListener
 import tv.limehd.adsmodule.interfaces.FragmentState
@@ -143,8 +140,8 @@ class MyTargetFragment(
 
                 if(LimeAds.isBackgroundRequestsCalled) {
                     // should restart BackgroundAdManager
-                    BackgroundAdManger.clearVariables()
-                    LimeAds.startBackgroundRequests(context!!, resId, fragmentState, adRequestListener, adShowListener)
+//                    BackgroundAdManger.clearVariables()
+//                    LimeAds.startBackgroundRequests(context!!, resId, fragmentState, adRequestListener, adShowListener)
                 }else {
                     Log.d(TAG, "BACKGROUND REQUEST ARE NOT STARTED")
                 }
@@ -209,7 +206,7 @@ class MyTargetFragment(
                 Log.d(TAG, "onError called")
                 adShowListener?.onError(error, AdType.MyTarget)
                 fragmentManager?.beginTransaction()?.remove(this@MyTargetFragment)?.commit()
-                limeAds.getNextAd(AdType.MyTarget.typeSdk)
+                limeAds.getNextAd(AdTypeIdentity.MyTarget.typeIdentity)
             }
 
             override fun onBannerComplete(p0: InstreamAd, p1: InstreamAd.InstreamAdBanner) {

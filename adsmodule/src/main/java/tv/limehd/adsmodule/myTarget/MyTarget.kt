@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.my.target.instreamads.InstreamAd
 import tv.limehd.adsmodule.AdType
+import tv.limehd.adsmodule.AdTypeIdentity
 import tv.limehd.adsmodule.LimeAds
 import tv.limehd.adsmodule.R
 import tv.limehd.adsmodule.interfaces.AdLoader
@@ -67,7 +68,7 @@ class MyTarget(
                     fragmentManager.beginTransaction().remove(myTargetFragment).commit()
                     fragmentState.onErrorState(context.resources.getString(R.string.no_ad_found_at_all), AdType.MyTarget)
                 }else {
-                    limeAds.getNextAd(AdType.MyTarget.typeSdk)
+                    limeAds.getNextAd(AdTypeIdentity.MyTarget.typeIdentity)
                 }
             }
         })

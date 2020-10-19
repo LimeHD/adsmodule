@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
@@ -267,7 +268,7 @@ class LimeAds {
                                         } else {
                                             when (adsList[0].type_sdk) {
                                                 AdType.Google.typeSdk -> it.getGoogleAd()
-                                                AdType.IMA.typeSdk -> it.getImaAd()
+                                                AdType.IMA.typeSdk -> it.getImaAd(adsList[0].url, adsList[0].type_identity)
                                                 AdType.Yandex.typeSdk -> it.getYandexAd()
                                                 AdType.MyTarget.typeSdk -> it.getMyTargetAd()
                                                 AdType.IMADEVICE.typeSdk -> it.getImaDeviceAd()
@@ -277,7 +278,7 @@ class LimeAds {
                                     }else {
                                         when (adsList[0].type_sdk) {
                                             AdType.Google.typeSdk -> it.getGoogleAd()
-                                            AdType.IMA.typeSdk -> it.getImaAd()
+                                            AdType.IMA.typeSdk -> it.getImaAd(adsList[0].url, adsList[0].type_identity)
                                             AdType.Yandex.typeSdk -> it.getYandexAd()
                                             AdType.MyTarget.typeSdk -> it.getMyTargetAd()
                                             AdType.IMADEVICE.typeSdk -> it.getImaDeviceAd()
@@ -471,6 +472,7 @@ class LimeAds {
 
     fun getNextAd(currentAd: String) {
         var nextAd: String? = null
+        var tagUrl: String? = null
 
         if(currentAdCounter == adsList.size){
             Log.d(TAG, "getNextAd: NOT LOADING NEXT AD, BECAUSE ALREADY ON THE LAST AD")
@@ -479,20 +481,24 @@ class LimeAds {
             }
             limeAds?.isAllowedToRequestAd = true
             prerollTimer = 0
+
+            limeAds?.adUiContainer?.visibility = View.GONE
+            currentAdCounter = 1
         }else {
             currentAdCounter++
             for (i in adsList.indices) {
-                if (adsList[i].type_sdk == currentAd) {
-                    nextAd = adsList[i + 1].type_sdk
+                if (adsList[i].type_identity == currentAd) {
+                    nextAd = adsList[i + 1].type_identity
+                    tagUrl = adsList[i + 1].url
                 }
             }
             Log.d(TAG, "Next ad after '$currentAd' is '$nextAd'")
             when (nextAd) {
-                AdType.Google.typeSdk -> getGoogleAd()
-                AdType.IMA.typeSdk -> getImaAd()
-                AdType.Yandex.typeSdk -> getYandexAd()
-                AdType.MyTarget.typeSdk -> getMyTargetAd()
-                AdType.IMADEVICE.typeSdk -> getImaDeviceAd()
+                AdTypeIdentity.Google.typeIdentity -> getGoogleAd()
+                AdTypeIdentity.MyTarget.typeIdentity -> getMyTargetAd()
+                AdTypeIdentity.Adriver.typeIdentity -> getImaAd(tagUrl, nextAd)
+                AdTypeIdentity.Hyperaudience.typeIdentity -> getImaAd(tagUrl, nextAd)
+                AdTypeIdentity.VideoNow.typeIdentity -> getImaAd(tagUrl, nextAd)
             }
         }
     }
@@ -567,11 +573,15 @@ class LimeAds {
      */
 
     @Throws(NullPointerException::class)
-    private fun getImaAd() {
+    private fun getImaAd(tagUrl: String?, adTypeIdentity: String) {
         Log.d(TAG, "Load IMA ad")
         if(myTargetFragment.view != null) {
             val imaAdContainer = myTargetFragment.view?.findViewById(R.id.imaAdFrameLayout) as FrameLayout
-            ima = Ima(context!!, Constants.testAdTagUrl, lastAd, resId, imaAdContainer, fragmentState, adRequestListener, adShowListener, this, myTargetFragment, fragmentManager)
+            if(tagUrl != null) {
+                ima = Ima(context!!, tagUrl, lastAd, resId, imaAdContainer, fragmentState, adRequestListener, adShowListener, this, myTargetFragment, fragmentManager, adTypeIdentity)
+            } else {
+                ima = Ima(context!!, Constants.testAdTagUrl, lastAd, resId, imaAdContainer, fragmentState, adRequestListener, adShowListener, this, myTargetFragment, fragmentManager, adTypeIdentity)
+            }
             loadAd(AdType.IMA)
         }else {
             Log.d(TAG, "getImaAd: MyTargetFragment view is null")

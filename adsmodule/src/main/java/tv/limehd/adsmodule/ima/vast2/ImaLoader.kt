@@ -37,7 +37,8 @@ class ImaLoader constructor(
     private val adShowListener: AdShowListener?,
     private val limeAds: LimeAds,
     private val myTargetFragment: MyTargetFragment,
-    private val fragmentManager: FragmentManager
+    private val fragmentManager: FragmentManager,
+    private val adTypeIdentity: String
 ) : AdsLoader.AdsLoadedListener, AdErrorEvent.AdErrorListener, AdEvent.AdEventListener {
 
     companion object {
@@ -68,7 +69,7 @@ class ImaLoader constructor(
             }else{
                 if(isTimeout){
                     adRequestListener?.onError(context.resources.getString(R.string.timeout_occurred), AdType.IMA)
-                    limeAds.getNextAd(AdType.IMA.typeSdk)
+                    limeAds.getNextAd(adTypeIdentity)
                 }
             }
         }
@@ -77,7 +78,7 @@ class ImaLoader constructor(
     private lateinit var viewGroup: ViewGroup
 
     fun loadImaAd(fragmentState: FragmentState) {
-        Log.d(TAG, "loadImaAd called")
+        Log.d(TAG, "loadImaAd called: $adTagUrl")
         this.fragmentState = fragmentState
 
         val activity = context as Activity
@@ -124,7 +125,7 @@ class ImaLoader constructor(
         adRequestListener?.onError(adErrorEvent?.error?.message.toString(), AdType.IMA)
         adShowListener?.onError(adErrorEvent?.error?.message.toString(), AdType.IMA)
         if(!isTimeout) {
-            limeAds.getNextAd(AdType.IMA.typeSdk)
+            limeAds.getNextAd(adTypeIdentity)
         }
     }
 
@@ -146,8 +147,8 @@ class ImaLoader constructor(
 
                 if(LimeAds.isBackgroundRequestsCalled) {
                     // should restart BackgroundAdManager
-                    BackgroundAdManger.clearVariables()
-                    LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
+//                    BackgroundAdManger.clearVariables()
+//                    LimeAds.startBackgroundRequests(context, resId, fragmentState, adRequestListener, adShowListener)
                 }else {
                     Log.d(TAG, "BACKGROUND REQUEST ARE NOT STARTED")
                 }
