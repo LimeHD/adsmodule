@@ -1,6 +1,7 @@
 package tv.limehd.adsmodule
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.os.Handler
 import android.util.Log
@@ -13,6 +14,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.yandex.metrica.YandexMetrica
+import com.yandex.metrica.YandexMetricaConfig
 import kotlinx.coroutines.Runnable
 import org.json.JSONObject
 import tv.limehd.adsmodule.adFox.AdFoxLoader
@@ -161,7 +164,7 @@ class LimeAds {
 
         @JvmStatic
         @Throws(IllegalArgumentException::class)
-        fun init(json: JSONObject) {
+        fun init(context: Context, json: JSONObject, application: Application) {
             if(json.isNull("ads") || json.isNull("ads_global") || json.getJSONArray("ads").length() == 0){
                 throw IllegalArgumentException("JSONObject is empty!")
             }
@@ -172,6 +175,13 @@ class LimeAds {
                 it.getAdsList(gson)
                 it.getAdsGlobalModels(gson)
             }
+
+            // Initializing the AppMetrica SDK
+            Log.d(TAG, "init: AppMetrica SDK")
+            val config: YandexMetricaConfig = YandexMetricaConfig.newConfigBuilder(context.getString(R.string.yandex_metrica_id)).build()
+            YandexMetrica.activate(context, config)
+            // Automatic tracking of user activity
+            YandexMetrica.enableActivityAutoTracking(application)
         }
 
         /**

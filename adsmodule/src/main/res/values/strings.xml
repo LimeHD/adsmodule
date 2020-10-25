@@ -21,4 +21,7 @@
     <string name="requestError" translatable="false">ERROR</string>
     <string name="noAd" translatable="false">NO AD FOUND</string>
 
+    // Yandex Metrica
+    <string name="yandex_metrica_id">9fa182fc-653c-4b08-a0bb-b203ce2b8db4</string>
+
 </resources>
