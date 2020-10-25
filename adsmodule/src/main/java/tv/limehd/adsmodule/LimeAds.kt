@@ -510,7 +510,15 @@ class LimeAds {
                 AdTypeIdentity.Hyperaudience.typeIdentity -> getImaAd(tagUrl, nextAd)
                 AdTypeIdentity.VideoNow.typeIdentity -> getImaAd(tagUrl, nextAd)
                 AdTypeIdentity.AdFox.typeIdentity -> getAdFoxAd()
-                null -> adRequestListener?.onEarlyRequest()
+                null -> {
+                    fragmentState.onErrorState(context!!.getString(R.string.no_ad_found_at_all))
+                    limeAds?.isAllowedToRequestAd = true
+                    prerollTimer = 0
+
+                    limeAds?.adUiContainer?.visibility = View.GONE
+                    currentAdCounter = 1
+                    BackgroundAdManger.clearVariables()
+                }
             }
         }
     }
